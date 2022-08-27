@@ -30,6 +30,7 @@ function Login() {
 
   const handleOnFinish = (values) => {
     console.log('Values before login: ', values);
+    const { email, password } = values;
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;

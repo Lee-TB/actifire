@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSigninCheck } from 'reactfire';
 
@@ -25,20 +27,33 @@ const TextLinkStyled = styled.div`
   text-align: center;
 `;
 
+const loadingIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+    }}
+    spin
+  />
+);
+
 function AuthLayout() {
-  const { data: userData } = useSigninCheck();
   const location = useLocation();
   const { pathname } = location;
+  const { status, data: userData } = useSigninCheck();
   const navigate = useNavigate();
 
-  if (userData && userData.signedIn) {
-    navigate('/');
-  }
+  useEffect(() => {
+    if (userData && userData.signedIn) {
+      navigate('/');
+    }
+  }, [userData]);
 
   return (
     <LayoutStyled>
       <ContentStyled>
-        <Outlet />
+        <Spin indicator={loadingIcon} spinning={status === 'loading'}>
+          <Outlet />
+        </Spin>
         {pathname.includes('/login') ? (
           <TextLinkStyled>
             <span>Not a member? </span>

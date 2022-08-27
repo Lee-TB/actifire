@@ -1,12 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Login, SignUp } from './features/auth';
+import { Routes, Route } from 'react-router-dom';
 import { AuthLayout, MainLayout } from './Layouts';
 import { Home, PageNotFound } from './pages';
+import { Login, SignUp } from './features/auth';
 
 function App() {
   return (
-    <Router>
+    <>
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
@@ -17,7 +17,7 @@ function App() {
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 

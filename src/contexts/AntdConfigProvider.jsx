@@ -4,7 +4,7 @@ import 'antd/dist/antd.variable.css';
 
 ConfigProvider.config({
   theme: {
-    primaryColor: '#1DA57A',
+    primaryColor: '#722ed1',
   },
 });
 
