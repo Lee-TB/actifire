@@ -9,13 +9,13 @@ import {
 } from 'reactfire';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyA0hdXSD52Ah4YiPZ2oOwpkP6KoGlbfYUA',
-  authDomain: 'activity-manager-e908b.firebaseapp.com',
-  projectId: 'activity-manager-e908b',
-  storageBucket: 'activity-manager-e908b.appspot.com',
-  messagingSenderId: '349571751001',
-  appId: '1:349571751001:web:d4baa2fd1c77517450e548',
-  measurementId: 'G-F2C3CS6HXX',
+  apiKey: 'AIzaSyC631Ji_Yxsa3KFy1grPdSuddSS_wdLLQI',
+  authDomain: 'actifire.firebaseapp.com',
+  projectId: 'actifire',
+  storageBucket: 'actifire.appspot.com',
+  messagingSenderId: '1070139088982',
+  appId: '1:1070139088982:web:457e55852847d14e2a5bf7',
+  measurementId: 'G-HGR2T83CBJ',
 };
 
 function FirebaseConfig({ children }) {
