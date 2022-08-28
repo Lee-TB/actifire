@@ -51,7 +51,7 @@ function MySider() {
         <Link to="/">
           <LogoContainerStyled>
             <SiFirebase />
-            <LogoTextStyled collapsed={collapsed}>actimanager</LogoTextStyled>
+            <LogoTextStyled collapsed={collapsed}>actifire</LogoTextStyled>
           </LogoContainerStyled>
         </Link>
         <Menu items={siderMenuItems} mode="inline" />
