@@ -15,6 +15,15 @@ const AntHeaderStyled = styled(AntHeader)`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  overflow: hidden;
+`;
+
+const SignUpButton = styled(Button)`
+  border-color: var(--ant-primary-color);
+  &:hover {
+    background-color: var(--ant-primary-9);
+    color: var(--ant-primary-1);
+  }
 `;
 
 const UserMenu = (
@@ -38,14 +47,6 @@ const UserMenu = (
     ]}
   />
 );
-
-const SignUpButton = styled(Button)`
-  border-color: var(--ant-primary-color);
-  &:hover {
-    background-color: var(--ant-primary-9);
-    color: var(--ant-primary-1);
-  }
-`;
 
 function Header() {
   const [userDropdownVisible, setUserDropdownVisible] = useState(false);

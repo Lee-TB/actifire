@@ -5,11 +5,15 @@ import Sider from './Sider';
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
+import { Spin } from '~/components';
+
+import { useSigninCheck } from 'reactfire';
 
 function MainLayout() {
+  const { status } = useSigninCheck();
   return (
-    <>
-      <Layout style={{ minHeight: '100vh' }}>
+    <Spin spinning={status === 'loading'}>
+      <Layout>
         <Sider />
         <Layout>
           <Header />
@@ -17,7 +21,7 @@ function MainLayout() {
           <Footer />
         </Layout>
       </Layout>
-    </>
+    </Spin>
   );
 }
 
