@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Dropdown, Avatar, Menu, Space } from 'antd';
+import { Layout, Dropdown, Avatar, Menu, Button, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -39,27 +39,44 @@ const UserMenu = (
   />
 );
 
+const SignUpButton = styled(Button)`
+  border-color: var(--ant-primary-color);
+  &:hover {
+    background-color: var(--ant-primary-9);
+    color: var(--ant-primary-1);
+  }
+`;
+
 function Header() {
   const [userDropdownVisible, setUserDropdownVisible] = useState(false);
   const { status, data: userData } = useSigninCheck();
-  console.log(userData);
-
   return (
     <AntHeaderStyled>
-      <div style={{ cursor: 'pointer' }}>
-        <Dropdown
-          overlay={UserMenu}
-          trigger={['click']}
-          placement="bottomRight"
-          visible={userDropdownVisible}
-          onVisibleChange={(visible) => setUserDropdownVisible(visible)}
-        >
-          <Space>
-            <DownOutlined />
-            <Avatar src="https://lh3.googleusercontent.com/a-/AFdZucoLa3eakzI7Sg3zBjSEp6zpEyMRwozjZpqqr2oUqg=s360-p-rw-no" />
-          </Space>
-        </Dropdown>
-      </div>
+      {userData && userData.signedIn ? (
+        <div style={{ cursor: 'pointer' }}>
+          <Dropdown
+            overlay={UserMenu}
+            trigger={['click']}
+            placement="bottomRight"
+            visible={userDropdownVisible}
+            onVisibleChange={(visible) => setUserDropdownVisible(visible)}
+          >
+            <div>
+              <DownOutlined />
+              <Avatar src="https://lh3.googleusercontent.com/a-/AFdZucoLa3eakzI7Sg3zBjSEp6zpEyMRwozjZpqqr2oUqg=s360-p-rw-no" />
+            </div>
+          </Dropdown>
+        </div>
+      ) : (
+        <Space>
+          <Link to="signup">
+            <SignUpButton>Sign Up</SignUpButton>
+          </Link>
+          <Link to="login">
+            <Button type="primary">Login</Button>
+          </Link>
+        </Space>
+      )}
     </AntHeaderStyled>
   );
 }
