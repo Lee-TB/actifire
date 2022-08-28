@@ -1,10 +1,10 @@
-import React from 'react';
-import { Form, Input, Button, Typography } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Button, Typography, Spin, message } from 'antd';
 import { AiOutlineMail } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useAuth, useSigninCheck } from 'reactfire';
+import { useAuth } from 'reactfire';
 
 const { Title } = Typography;
 
@@ -26,18 +26,24 @@ const validateMessages = {
 };
 
 function SignUp() {
+  const [submitLoading, setSubmitLoading] = useState(false);
   const auth = useAuth();
 
   const handleOnFinish = (values) => {
+    setSubmitLoading(true);
     console.log('Values before sign up: ', values);
     const { email, password } = values;
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log('create user success: ', user);
+      .then(() => {
+        message.success('Sign up successful');
+        setSubmitLoading(false);
       })
       .catch((error) => {
         console.log('create user error: ', error);
+        if (error.code === 'auth/email-already-in-use') {
+          message.error('email already in use');
+        }
+        setSubmitLoading(false);
       });
   };
 
@@ -45,55 +51,64 @@ function SignUp() {
     console.log('Failed:', error);
   };
   return (
-    <Form
-      name="signup"
-      size="large"
-      validateMessages={validateMessages}
-      onFinish={handleOnFinish}
-      onFinishFailed={handleFinishFailed}
-    >
-      <TitleStyled>sign up</TitleStyled>
-      <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>
-        <Input prefix={<AiOutlineMail />} placeholder="email" />
-      </Form.Item>
-      <Form.Item
-        name="password"
-        rules={[{ required: true }, { min: 6, message: 'Password too short!' }]}
+    <Spin indicator={<></>} spinning={submitLoading}>
+      <Form
+        name="signup"
+        size="large"
+        validateMessages={validateMessages}
+        onFinish={handleOnFinish}
+        onFinishFailed={handleFinishFailed}
       >
-        <Input.Password
-          prefix={<RiLockPasswordLine />}
-          placeholder="password"
-        />
-      </Form.Item>
-      <Form.Item
-        name="confirm"
-        rules={[
-          { required: true },
-          { min: 6, message: 'Password too short!' },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-              }
+        <TitleStyled>sign up</TitleStyled>
+        <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>
+          <Input prefix={<AiOutlineMail />} placeholder="email" />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          rules={[
+            { required: true },
+            { min: 6, message: 'Password too short!' },
+          ]}
+        >
+          <Input.Password
+            prefix={<RiLockPasswordLine />}
+            placeholder="password"
+          />
+        </Form.Item>
+        <Form.Item
+          name="confirm"
+          rules={[
+            { required: true },
+            { min: 6, message: 'Password too short!' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
 
-              return Promise.reject(
-                new Error('The two passwords that you entered do not match!')
-              );
-            },
-          }),
-        ]}
-      >
-        <Input.Password
-          prefix={<RiLockPasswordLine />}
-          placeholder="confirm password"
-        />
-      </Form.Item>
-      <Form.Item>
-        <ButtonStyled type="primary" htmlType="submit">
-          sign up now
-        </ButtonStyled>
-      </Form.Item>
-    </Form>
+                return Promise.reject(
+                  new Error('The two passwords that you entered do not match!')
+                );
+              },
+            }),
+          ]}
+        >
+          <Input.Password
+            prefix={<RiLockPasswordLine />}
+            placeholder="confirm password"
+          />
+        </Form.Item>
+        <Form.Item>
+          <ButtonStyled
+            type="primary"
+            htmlType="submit"
+            loading={submitLoading}
+          >
+            sign up now
+          </ButtonStyled>
+        </Form.Item>
+      </Form>
+    </Spin>
   );
 }
 
