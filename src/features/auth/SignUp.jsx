@@ -31,7 +31,6 @@ function SignUp() {
 
   const handleOnFinish = (values) => {
     setSubmitLoading(true);
-    console.log('Values before sign up: ', values);
     const { email, password } = values;
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {

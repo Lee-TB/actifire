@@ -31,7 +31,6 @@ function Login() {
 
   const handleOnFinish = (values) => {
     setSubmitLoading(true);
-    console.log('Values before login: ', values);
     const { email, password } = values;
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
