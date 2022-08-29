@@ -6,6 +6,7 @@ import {
   GroupOutlined,
   LogoutOutlined,
   UserOutlined,
+  AppstoreAddOutlined,
 } from '@ant-design/icons';
 import { CgProfile } from 'react-icons/cg';
 import styled from 'styled-components';
@@ -19,9 +20,18 @@ const AntHeaderStyled = styled(AntHeader)`
   background-color: #f5f5f5;
   border-bottom: 1px solid #ccc;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   overflow: hidden;
+`;
+
+const NewRoomButton = styled(Button)`
+  border: 1px solid var(--ant-primary-color);
+  &:hover {
+    border: 1px solid var(--ant-primary-color);
+    background-color: var(--ant-primary-9);
+    color: var(--ant-primary-1);
+  }
 `;
 
 const SignUpButton = styled(Button)`
@@ -67,6 +77,11 @@ function Header() {
   const { status, data: userData } = useSigninCheck();
   return (
     <AntHeaderStyled>
+      <Link to="/create-room">
+        <NewRoomButton icon={<AppstoreAddOutlined />} type="link" shape="round">
+          New room
+        </NewRoomButton>
+      </Link>
       {userData && userData.signedIn ? (
         <div style={{ cursor: 'pointer' }}>
           <Dropdown

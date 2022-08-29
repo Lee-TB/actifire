@@ -17,7 +17,6 @@ function Content() {
         <Breadcrumb.Item>App</Breadcrumb.Item>
       </Breadcrumb>
       <div style={{ minHeight: '280px', padding: '24px', background: '#fff' }}>
-        Content
         <Outlet />
       </div>
     </AntContent>
