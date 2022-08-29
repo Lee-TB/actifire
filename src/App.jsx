@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AuthLayout, MainLayout } from './Layouts';
-import { Home, PageNotFound } from './pages';
+import { Home, Profile, Room, PageNotFound } from './pages';
 import { Login, SignUp } from './features/auth';
 
 function App() {
@@ -10,6 +10,8 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="room" element={<Room />} />
         </Route>
         <Route path="/" element={<AuthLayout />}>
           <Route path="login" element={<Login />} />
