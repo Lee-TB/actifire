@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Divider } from 'antd';
+import { Layout, Menu } from 'antd';
 import { SiFirebase } from 'react-icons/si';
-import { BiGroup } from 'react-icons/bi';
+import { GroupOutlined } from '@ant-design/icons';
 import { CgProfile } from 'react-icons/cg';
-import { SignOut } from '~/features/auth';
 import styled from 'styled-components';
+import { useSigninCheck } from 'reactfire';
 
-const { Sider } = Layout;
+const { Sider: AntSider } = Layout;
 
-const SiderStyled = styled(Sider)`
+const SiderStyled = styled(AntSider)`
   background-color: #f5f5f5;
   border-right: 1px solid #ccc;
   & .ant-layout-sider-trigger {
@@ -31,15 +31,25 @@ const LogoContainerStyled = styled.div`
 
 const LogoTextStyled = styled.span`
   margin-left: 4px;
+  display: ${(props) => (props.collapsed && 'none') || 'ineline'};
 `;
 
 const siderMenuItems = [
-  { key: 'profile', icon: <CgProfile />, label: 'profile' },
-  { key: 'server', icon: <BiGroup />, label: 'server' },
+  {
+    key: 'server',
+    icon: <GroupOutlined />,
+    label: <Link to="/room">Room</Link>,
+  },
+  {
+    key: 'profile',
+    icon: <CgProfile />,
+    label: <Link to="/profile">Profile</Link>,
+  },
 ];
 
-function MySider() {
+function Sider() {
   const [collapsed, setCollapsed] = useState(false);
+  const { data: userData } = useSigninCheck();
 
   return (
     <>
@@ -55,11 +65,9 @@ function MySider() {
           </LogoContainerStyled>
         </Link>
         <Menu items={siderMenuItems} mode="inline" />
-        <Divider />
-        <SignOut />
       </SiderStyled>
     </>
   );
 }
 
-export default MySider;
+export default Sider;

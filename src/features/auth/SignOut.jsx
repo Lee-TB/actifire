@@ -7,6 +7,7 @@ import { message } from 'antd';
 const Button = styled.button`
   cursor: pointer;
   border: none;
+  ontline: none;
   background-color: unset;
 `;
 

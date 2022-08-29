@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import { Layout, Dropdown, Avatar, Menu, Button, Space } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Layout, Dropdown, Avatar, Menu, Button, Space } from 'antd';
+import {
+  DownOutlined,
+  GroupOutlined,
+  LogoutOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+import { CgProfile } from 'react-icons/cg';
+import styled from 'styled-components';
 
 import { SignOut } from '~/features/auth';
 import { useSigninCheck } from 'reactfire';
@@ -26,23 +32,31 @@ const SignUpButton = styled(Button)`
   }
 `;
 
-const UserMenu = (
+const AvatarStyled = styled(Avatar)`
+  border: 2px solid var(--ant-primary-color);
+  margin-left: 2px;
+`;
+
+const userMenu = (
   <Menu
     items={[
       {
+        icon: <CgProfile />,
         label: <Link to="/profile">Your profile</Link>,
         key: '0',
       },
       {
-        label: <Link to="/server">Your server</Link>,
+        icon: <GroupOutlined />,
+        label: <Link to="/room">Your room</Link>,
         key: '1',
       },
       {
         type: 'divider',
       },
       {
+        icon: <LogoutOutlined />,
         label: <SignOut>Log Out</SignOut>,
-        key: '3',
+        key: '2',
       },
     ]}
   />
@@ -56,7 +70,7 @@ function Header() {
       {userData && userData.signedIn ? (
         <div style={{ cursor: 'pointer' }}>
           <Dropdown
-            overlay={UserMenu}
+            overlay={userMenu}
             trigger={['click']}
             placement="bottomRight"
             visible={userDropdownVisible}
@@ -64,7 +78,10 @@ function Header() {
           >
             <div>
               <DownOutlined />
-              <Avatar src="https://lh3.googleusercontent.com/a-/AFdZucoLa3eakzI7Sg3zBjSEp6zpEyMRwozjZpqqr2oUqg=s360-p-rw-no" />
+              <AvatarStyled
+                src={userData.user.photoURL}
+                icon={<UserOutlined />}
+              />
             </div>
           </Dropdown>
         </div>
