@@ -4,7 +4,7 @@ import { signOut } from 'firebase/auth';
 import { useAuth } from 'reactfire';
 import { message } from 'antd';
 
-const Button = styled.button`
+const ButtonStyled = styled.button`
   cursor: pointer;
   border: none;
   ontline: none;
@@ -26,9 +26,9 @@ function SignOutButton({ children, ...props }) {
   };
 
   return (
-    <Button onClick={handleSignOut} {...props}>
+    <ButtonStyled onClick={handleSignOut} {...props}>
       {children}
-    </Button>
+    </ButtonStyled>
   );
 }
 

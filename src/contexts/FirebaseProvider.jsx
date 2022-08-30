@@ -30,7 +30,7 @@ function FirebaseConfig({ children }) {
   );
 }
 
-function FirebaseConfigProvider({ children }) {
+function FirebaseProvider({ children }) {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <FirebaseConfig>{children}</FirebaseConfig>
@@ -38,4 +38,4 @@ function FirebaseConfigProvider({ children }) {
   );
 }
 
-export default FirebaseConfigProvider;
+export default FirebaseProvider;

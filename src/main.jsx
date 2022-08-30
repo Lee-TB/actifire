@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { FirebaseConfigProvider, AntdConfigProvider } from './contexts';
+import { BrowserRouter } from 'react-router-dom';
+import { FirebaseProvider, AntdConfigProvider } from './contexts';
 import App from './App';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Router>
-      <FirebaseConfigProvider>
+    <BrowserRouter>
+      <FirebaseProvider>
         <AntdConfigProvider>
           <App />
         </AntdConfigProvider>
-      </FirebaseConfigProvider>
-    </Router>
+      </FirebaseProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
