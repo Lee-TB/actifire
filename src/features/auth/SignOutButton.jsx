@@ -11,13 +11,13 @@ const Button = styled.button`
   background-color: unset;
 `;
 
-function SignOut({ children, ...props }) {
+function SignOutButton({ children, ...props }) {
   const auth = useAuth();
 
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
-        message.success('Sign Out successful..');
+        message.success('Sign Out successful');
       })
       .catch((error) => {
         console.log('sign out error', error);
@@ -32,4 +32,4 @@ function SignOut({ children, ...props }) {
   );
 }
 
-export default SignOut;
+export default SignOutButton;

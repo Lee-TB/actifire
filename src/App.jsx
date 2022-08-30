@@ -1,23 +1,26 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AuthLayout, MainLayout } from './Layouts';
-import { Home, Profile, Room, PageNotFound } from './pages';
-import { Login, SignUp } from './features/auth';
-import CreateRoomForm from './pages/CreateRoomForm';
+import { ExplorePage, YourRoomsPage, PageNotFound, ProfilePage } from './pages';
+import { LoginForm, SignUpForm } from './features/auth';
+import { CreateRoomForm } from './features/room';
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="room" element={<Room />} />
-          <Route path="create-room" element={<CreateRoomForm />} />
+          <Route index element={<ExplorePage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="your-rooms">
+            <Route index element={<YourRoomsPage />} />
+            <Route path=":roomId" element={<></>} />
+            <Route path="create-room" element={<CreateRoomForm />} />
+          </Route>
         </Route>
         <Route path="/" element={<AuthLayout />}>
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<SignUp />} />
+          <Route path="login" element={<LoginForm />} />
+          <Route path="signup" element={<SignUpForm />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

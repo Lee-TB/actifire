@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Typography, Spin, message } from 'antd';
 import { AiOutlineMail } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import styled from 'styled-components';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useAuth } from 'reactfire';
+import styled from 'styled-components';
 
 const { Title } = Typography;
 
@@ -25,22 +25,25 @@ const validateMessages = {
   },
 };
 
-function SignUp() {
-  const [submitLoading, setSubmitLoading] = useState(false);
+function LoginForm() {
   const auth = useAuth();
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   const handleOnFinish = (values) => {
     setSubmitLoading(true);
     const { email, password } = values;
-    createUserWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        message.success('Sign up successful');
+        message.success('Login successful');
+        console.log('Login successful');
         setSubmitLoading(false);
       })
       .catch((error) => {
-        console.log('create user error: ', error);
-        if (error.code === 'auth/email-already-in-use') {
-          message.error('email already in use');
+        console.log('Login error: ', error);
+        if (error.code === 'auth/user-not-found') {
+          message.error('User not found');
+        } else if (error.code === 'auth/wrong-password') {
+          message.error('Wrong password');
         }
         setSubmitLoading(false);
       });
@@ -49,16 +52,17 @@ function SignUp() {
   const handleFinishFailed = (error) => {
     console.log('Failed:', error);
   };
+
   return (
     <Spin indicator={<></>} spinning={submitLoading}>
       <Form
-        name="signup"
+        name="login"
         size="large"
         validateMessages={validateMessages}
         onFinish={handleOnFinish}
         onFinishFailed={handleFinishFailed}
       >
-        <TitleStyled>sign up</TitleStyled>
+        <TitleStyled>login</TitleStyled>
         <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>
           <Input prefix={<AiOutlineMail />} placeholder="email" />
         </Form.Item>
@@ -74,36 +78,13 @@ function SignUp() {
             placeholder="password"
           />
         </Form.Item>
-        <Form.Item
-          name="confirm"
-          rules={[
-            { required: true },
-            { min: 6, message: 'Password too short!' },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve();
-                }
-
-                return Promise.reject(
-                  new Error('The two passwords that you entered do not match!')
-                );
-              },
-            }),
-          ]}
-        >
-          <Input.Password
-            prefix={<RiLockPasswordLine />}
-            placeholder="confirm password"
-          />
-        </Form.Item>
         <Form.Item>
           <ButtonStyled
             type="primary"
             htmlType="submit"
             loading={submitLoading}
           >
-            sign up now
+            login now
           </ButtonStyled>
         </Form.Item>
       </Form>
@@ -111,4 +92,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default LoginForm;

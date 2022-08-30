@@ -1,3 +1,3 @@
-export { default as Login } from './Login';
-export { default as SignUp } from './SignUp';
-export { default as SignOut } from './SignOut';
+export { default as LoginForm } from './LoginForm';
+export { default as SignUpForm } from './SignUpForm';
+export { default as SignOutButton } from './SignOutButton';

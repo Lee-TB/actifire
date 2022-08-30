@@ -38,7 +38,7 @@ const siderMenuItems = [
   {
     key: 'server',
     icon: <GroupOutlined />,
-    label: <Link to="/room">Room</Link>,
+    label: <Link to="/your-rooms">Room</Link>,
   },
   {
     key: 'profile',

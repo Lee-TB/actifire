@@ -1,4 +1,5 @@
-export { default as Home } from './Home';
-export { default as Profile } from './Profile';
-export { default as Room } from './Room';
+export { default as HomePage } from './HomePage';
+export { default as ExplorePage } from './ExplorePage';
+export { default as ProfilePage } from './ProfilePage';
+export { default as YourRoomsPage } from './YourRoomsPage';
 export { default as PageNotFound } from './PageNotFound';

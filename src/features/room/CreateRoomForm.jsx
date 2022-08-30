@@ -2,11 +2,12 @@ import React from 'react';
 import { Form, Input, InputNumber, Button, Space } from 'antd';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { doc, setDoc } from 'firebase/firestore';
+import { collection, doc, setDoc } from 'firebase/firestore';
 import { useFirestore } from 'reactfire';
+import { useNavigate } from 'react-router-dom';
 
 const FomContainer = styled.div`
-  width: 600px;
+  width: 50%;
 `;
 
 const FormTitle = styled.h1`
@@ -21,11 +22,15 @@ const DeleteRoleButton = styled.div`
 
 function CreateRoomForm() {
   const firestore = useFirestore();
+  const navigate = useNavigate();
 
   const handleFinish = (roomData) => {
-    const roomDocRef = doc(firestore, 'rooms', roomData.roomName);
+    const roomsColRef = collection(firestore, 'rooms');
+    const roomDocRef = doc(roomsColRef); // a new document with generated Id
     setDoc(roomDocRef, roomData).then(() => {
       console.log('create room successful');
+      console.log(roomDocRef.id);
+      navigate(`/your-rooms/${roomDocRef.id}`);
     });
   };
   return (
@@ -54,28 +59,27 @@ function CreateRoomForm() {
                       rules={[
                         {
                           required: true,
-                          whitespace: true,
-                          message: "Please input role's name.",
+                          message: "Please fill role's name.",
                         },
                       ]}
                       noStyle
                     >
-                      <Input placeholder="role name" />
+                      <Input placeholder="Role name" />
                     </Form.Item>
 
                     <Form.Item
                       {...restField}
-                      name={[name, 'score']}
+                      name={[name, 'coef']}
                       validateTrigger={['onChange', 'onBlur']}
                       rules={[
                         {
                           required: true,
-                          message: "Please input role's score.",
+                          message: "Please fill role's coefficient.",
                         },
                       ]}
                       noStyle
                     >
-                      <InputNumber placeholder="score" min={1} max={10} />
+                      <InputNumber placeholder="Coef" min={1} max={10} />
                     </Form.Item>
                     <DeleteRoleButton>
                       <MinusCircleOutlined onClick={() => remove(name)} />
@@ -87,9 +91,6 @@ function CreateRoomForm() {
                 <Button
                   type="dashed"
                   onClick={() => add()}
-                  style={{
-                    width: '30%',
-                  }}
                   icon={<PlusCircleOutlined />}
                 >
                   Add role

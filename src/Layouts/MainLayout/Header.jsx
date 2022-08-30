@@ -11,7 +11,7 @@ import {
 import { CgProfile } from 'react-icons/cg';
 import styled from 'styled-components';
 
-import { SignOut } from '~/features/auth';
+import { SignOutButton } from '~/features/auth';
 import { useSigninCheck } from 'reactfire';
 
 const { Header: AntHeader } = Layout;
@@ -25,7 +25,7 @@ const AntHeaderStyled = styled(AntHeader)`
   overflow: hidden;
 `;
 
-const NewRoomButton = styled(Button)`
+const NewRoomButtonStyled = styled(Button)`
   border: 1px solid var(--ant-primary-color);
   &:hover {
     border: 1px solid var(--ant-primary-color);
@@ -34,7 +34,7 @@ const NewRoomButton = styled(Button)`
   }
 `;
 
-const SignUpButton = styled(Button)`
+const SignUpButtonStyled = styled(Button)`
   border-color: var(--ant-primary-color);
   &:hover {
     background-color: var(--ant-primary-9);
@@ -65,7 +65,7 @@ const userMenu = (
       },
       {
         icon: <LogoutOutlined />,
-        label: <SignOut>Log Out</SignOut>,
+        label: <SignOutButton>Log Out</SignOutButton>,
         key: '2',
       },
     ]}
@@ -77,10 +77,14 @@ function Header() {
   const { status, data: userData } = useSigninCheck();
   return (
     <AntHeaderStyled>
-      <Link to="/create-room">
-        <NewRoomButton icon={<AppstoreAddOutlined />} type="link" shape="round">
+      <Link to="/your-rooms/create-room">
+        <NewRoomButtonStyled
+          icon={<AppstoreAddOutlined />}
+          type="link"
+          shape="round"
+        >
           New room
-        </NewRoomButton>
+        </NewRoomButtonStyled>
       </Link>
       {userData && userData.signedIn ? (
         <div style={{ cursor: 'pointer' }}>
@@ -103,7 +107,7 @@ function Header() {
       ) : (
         <Space>
           <Link to="signup">
-            <SignUpButton>Sign Up</SignUpButton>
+            <SignUpButtonStyled>Sign Up</SignUpButtonStyled>
           </Link>
           <Link to="login">
             <Button type="primary">Login</Button>
