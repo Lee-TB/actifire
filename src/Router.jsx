@@ -19,7 +19,10 @@ function Router() {
             {/* display your room list */}
             <Route index element={<YourRoomsPage />} />
             {/* display your invidual room */}
-            <Route path=":roomId" element={<></>} />
+            <Route path=":roomId">
+              <Route index />
+              <Route path="members" element="members" />
+            </Route>
             {/* create room */}
             <Route path="create-room" element={<CreateRoomForm />} />
           </Route>

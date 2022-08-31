@@ -15,7 +15,7 @@ function Content() {
       >
         <Breadcrumb.Item>Your rooms</Breadcrumb.Item>
         <Breadcrumb.Item>Hoat dong cong dong 2020</Breadcrumb.Item>
-        <Breadcrumb.Item>activites</Breadcrumb.Item>
+        <Breadcrumb.Item>members</Breadcrumb.Item>
       </Breadcrumb>
       <div style={{ minHeight: '280px', padding: '24px', background: '#fff' }}>
         <Outlet />

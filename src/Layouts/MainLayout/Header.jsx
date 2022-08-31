@@ -75,6 +75,7 @@ const userMenu = (
 function Header() {
   const [userDropdownVisible, setUserDropdownVisible] = useState(false);
   const { status, data: userData } = useSigninCheck();
+
   return (
     <AntHeaderStyled>
       <Link to="/your-rooms/create-room">
@@ -86,7 +87,7 @@ function Header() {
           New room
         </NewRoomButtonStyled>
       </Link>
-      {userData && userData.signedIn ? (
+      {userData?.signedIn ? (
         <div style={{ cursor: 'pointer' }}>
           <Dropdown
             overlay={userMenu}

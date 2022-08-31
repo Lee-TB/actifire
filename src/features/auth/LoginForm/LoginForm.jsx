@@ -49,10 +49,6 @@ function LoginForm() {
       });
   };
 
-  const handleFinishFailed = (error) => {
-    console.log('Failed:', error);
-  };
-
   return (
     <Spin indicator={<></>} spinning={submitLoading}>
       <Form
@@ -60,7 +56,6 @@ function LoginForm() {
         size="large"
         validateMessages={validateMessages}
         onFinish={handleOnFinish}
-        onFinishFailed={handleFinishFailed}
       >
         <TitleStyled>login</TitleStyled>
         <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>

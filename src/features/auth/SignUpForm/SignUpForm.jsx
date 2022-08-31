@@ -46,9 +46,6 @@ function SignUpForm() {
       });
   };
 
-  const handleFinishFailed = (error) => {
-    console.log('Failed:', error);
-  };
   return (
     <Spin indicator={<></>} spinning={submitLoading}>
       <Form
@@ -56,12 +53,13 @@ function SignUpForm() {
         size="large"
         validateMessages={validateMessages}
         onFinish={handleOnFinish}
-        onFinishFailed={handleFinishFailed}
       >
         <TitleStyled>sign up</TitleStyled>
+
         <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>
           <Input prefix={<AiOutlineMail />} placeholder="email" />
         </Form.Item>
+
         <Form.Item
           name="password"
           rules={[
@@ -74,6 +72,7 @@ function SignUpForm() {
             placeholder="password"
           />
         </Form.Item>
+
         <Form.Item
           name="confirm"
           rules={[
@@ -97,6 +96,7 @@ function SignUpForm() {
             placeholder="confirm password"
           />
         </Form.Item>
+
         <Form.Item>
           <ButtonStyled
             type="primary"
