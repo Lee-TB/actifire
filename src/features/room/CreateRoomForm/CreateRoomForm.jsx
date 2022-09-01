@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { Form, Input, InputNumber, Button, message, Space } from 'antd';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { collection, doc, setDoc, writeBatch } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  writeBatch,
+  serverTimestamp,
+} from 'firebase/firestore';
 import { useFirestore, useSigninCheck } from 'reactfire';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,8 +59,13 @@ function CreateRoomForm() {
       roomDescription: values.roomDescription || '',
       owner: {
         uid: data?.user?.uid,
+        email: data?.user?.email,
+        displayName: data?.user?.displayName,
+        photoURL: data?.user?.photoURL,
+        phoneNumber: data?.user?.phoneNumber,
       },
       id: roomDocRef.id,
+      createAt: serverTimestamp(),
     };
 
     const memberData = {
@@ -64,6 +74,7 @@ function CreateRoomForm() {
       displayName: data?.user?.displayName,
       photoURL: data?.user?.photoURL,
       phoneNumber: data?.user?.phoneNumber,
+      createAt: serverTimestamp(),
     };
 
     batch.set(roomDocRef, roomData);
