@@ -4,7 +4,8 @@ import { AiOutlineMail } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useAuth } from 'reactfire';
+import { useAuth, useFirestore } from 'reactfire';
+import { collection, doc, setDoc } from 'firebase/firestore';
 
 const { Title } = Typography;
 
@@ -28,14 +29,33 @@ const validateMessages = {
 function SignUpForm() {
   const [submitLoading, setSubmitLoading] = useState(false);
   const auth = useAuth();
+  const firestore = useFirestore();
 
   const handleOnFinish = (values) => {
     setSubmitLoading(true);
     const { email, password } = values;
     createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      .then((userCredential) => {
         message.success('Sign up successful');
         setSubmitLoading(false);
+        // also write user data to firestore
+        const { user } = userCredential;
+        const usersCol = collection(firestore, 'users');
+        const userDoc = doc(usersCol, user.uid);
+        const userData = {
+          uid: user.uid,
+          email: user.email || '',
+          phoneNumber: user.phoneNumber || '',
+          displayName: user.displayName || '',
+          photoURL: user.photoURL || '',
+        };
+        setDoc(userDoc, userData)
+          .then(() => {
+            console.log('add user firestore success');
+          })
+          .catch((error) => {
+            console.log('add user firestore error: ', error);
+          });
       })
       .catch((error) => {
         console.log('create user error: ', error);
