@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { AuthLayout, MainLayout } from './Layouts';
-import { ExplorePage, YourRoomsPage, PageNotFound, ProfilePage } from './pages';
+import { HomePage, YourRoomsPage, PageNotFound, ProfilePage } from './pages';
 import { LoginForm, SignUpForm } from './features/auth';
 import { CreateRoomForm, RoomList } from './features/room';
 
@@ -11,13 +11,13 @@ function App() {
         {/* For all page have main layout */}
         <Route path="/" element={<MainLayout />}>
           {/* Explore existing room */}
-          <Route index element={<ExplorePage />} />
+          <Route index element={<HomePage />} />
           {/* display and setting your profile */}
           <Route path="profile" element={<ProfilePage />} />
 
-          <Route path="your-rooms" element={<YourRoomsPage />}>
+          <Route path="your-rooms">
             {/* display your room list */}
-            <Route index element={<RoomList />} />
+            <Route index element={<YourRoomsPage />} />
             {/* display your invidual room */}
             <Route path=":roomId">
               <Route index />

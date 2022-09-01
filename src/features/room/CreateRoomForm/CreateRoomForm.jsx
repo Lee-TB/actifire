@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, InputNumber, Button, message, Space } from 'antd';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import {
-  collection,
-  doc,
-  writeBatch,
-  serverTimestamp,
-} from 'firebase/firestore';
+import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useFirestore, useSigninCheck } from 'reactfire';
 import { useNavigate } from 'react-router-dom';
 
@@ -47,11 +42,8 @@ function CreateRoomForm() {
 
   const handleFinish = (values) => {
     setIsLoading(true);
-    const batch = writeBatch(firestore);
     const roomsColRef = collection(firestore, 'rooms');
     const roomDocRef = doc(roomsColRef); // a new document with generated ID
-    const membersColRef = collection(roomsColRef, roomDocRef.id, 'members');
-    const memberDocRef = doc(membersColRef, data?.user?.uid); // doc ID is user ID enroll to the room
 
     const roomData = {
       roomName: values.roomName || '',
@@ -64,23 +56,12 @@ function CreateRoomForm() {
         photoURL: data?.user?.photoURL,
         phoneNumber: data?.user?.phoneNumber,
       },
+      members: [{ uid: data?.user?.uid }],
       id: roomDocRef.id,
       createAt: serverTimestamp(),
     };
 
-    const memberData = {
-      uid: data?.user?.uid,
-      email: data?.user?.email,
-      displayName: data?.user?.displayName,
-      photoURL: data?.user?.photoURL,
-      phoneNumber: data?.user?.phoneNumber,
-      createAt: serverTimestamp(),
-    };
-
-    batch.set(roomDocRef, roomData);
-    batch.set(memberDocRef, memberData);
-    batch
-      .commit()
+    setDoc(roomDocRef, roomData)
       .then(() => {
         message.success('Create room successful');
         setIsLoading(false);

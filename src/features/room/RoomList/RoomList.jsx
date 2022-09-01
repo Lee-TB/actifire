@@ -1,7 +1,5 @@
 import React from 'react';
 import { List, Card, Typography } from 'antd';
-import { collection, doc, query, where } from 'firebase/firestore';
-import { useFirestore, useFirestoreCollectionData, useUser } from 'reactfire';
 import { Link } from 'react-router-dom';
 import { formatDateTime } from '~/utils/format/date';
 import styled from 'styled-components';
@@ -16,17 +14,17 @@ const DescriptionStyled = styled.p``;
 
 const OwnerStyled = styled.div``;
 
-function RoomList() {
-  const firestore = useFirestore();
-  const roomsCollection = collection(firestore, 'rooms');
-  const roomsQuery = query(roomsCollection);
-  const { status, data: rooms } = useFirestoreCollectionData(roomsQuery, {
-    idField: 'id',
-  });
+function RoomList({ title, rooms }) {
+  // const firestore = useFirestore();
+  // const roomsCollection = collection(firestore, 'rooms');
+  // const roomsQuery = query(roomsCollection);
+  // const { status, data: rooms } = useFirestoreCollectionData(roomsQuery, {
+  //   idField: 'id',
+  // });
 
   return (
     <>
-      <Title>Your Room List</Title>
+      <Title>{title}</Title>
       <List
         grid={{
           gutter: 16,
