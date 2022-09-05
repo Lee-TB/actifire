@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { Form, Input, InputNumber, Button, message, Space } from 'antd';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  arrayUnion,
+  serverTimestamp,
+  writeBatch,
+} from 'firebase/firestore';
 import { useFirestore, useSigninCheck } from 'reactfire';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,7 +28,14 @@ const DeleteRoleButton = styled.div`
   width: 5%;
 `;
 
-const roles = [
+const RoleDescriptionStyled = styled.span`
+  font-size: 12px;
+  font-style: italic;
+  display: inline-block;
+  margin-bottom: 4px;
+`;
+
+const defaultRoles = [
   { roleName: 'participant', roleCoef: '1' },
   { roleName: 'supporter', roleCoef: '2' },
   { roleName: 'reporter', roleCoef: '3' },
@@ -44,10 +57,10 @@ function CreateRoomForm() {
     setIsLoading(true);
     const roomsColRef = collection(firestore, 'rooms');
     const roomDocRef = doc(roomsColRef); // a new document with generated ID
-
+    const userDocRef = doc(firestore, `users/${data?.user?.uid}`);
     const roomData = {
       roomName: values.roomName || '',
-      roles: values.roles || [],
+      roles: values.roles || defaultRoles,
       roomDescription: values.roomDescription || '',
       owner: {
         uid: data?.user?.uid,
@@ -61,14 +74,25 @@ function CreateRoomForm() {
       createAt: serverTimestamp(),
     };
 
-    setDoc(roomDocRef, roomData)
+    const batch = writeBatch(firestore);
+
+    batch.set(roomDocRef, roomData);
+
+    batch.update(userDocRef, {
+      rooms: arrayUnion({ roomId: roomDocRef.id }),
+    });
+
+    batch
+      .commit()
       .then(() => {
         message.success('Create room successful');
+        console.log('Update user data success.');
         setIsLoading(false);
         navigate(`/your-rooms/${roomDocRef.id}`);
       })
       .catch((error) => {
         message.error(error);
+        console.log(error);
         setIsLoading(false);
       });
   };
@@ -91,6 +115,9 @@ function CreateRoomForm() {
           </Form.Item>
 
           <Form.Item label="Define roles">
+            <RoleDescriptionStyled>
+              If you don't define them. Default roles will be added.
+            </RoleDescriptionStyled>
             <Form.List name="roles">
               {(fields, { add, remove }) => (
                 <>
@@ -114,7 +141,7 @@ function CreateRoomForm() {
 
                         <Form.Item
                           {...restField}
-                          name={[name, 'coef']}
+                          name={[name, 'roleCoef']}
                           validateTrigger={['onChange', 'onBlur']}
                           rules={[
                             {

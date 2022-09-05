@@ -48,6 +48,7 @@ function SignUpForm() {
           phoneNumber: user.phoneNumber || '',
           displayName: user.displayName || '',
           photoURL: user.photoURL || '',
+          rooms: [],
         };
         setDoc(userDoc, userData)
           .then(() => {
