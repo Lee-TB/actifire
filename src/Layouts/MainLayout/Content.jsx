@@ -2,8 +2,16 @@ import React from 'react';
 import { Layout, Breadcrumb } from 'antd';
 import { HomeFilled } from '@ant-design/icons';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 
 const { Content: AntContent } = Layout;
+
+const ContentInnerStyled = styled.div`
+  background: #fff;
+  min-height: 280px;
+  padding: 24px;
+  padding-top: 0px;
+`;
 
 function Content() {
   const location = useLocation();
@@ -34,9 +42,10 @@ function Content() {
         </Breadcrumb.Item>
         {breadcrumbItems}
       </Breadcrumb>
-      <div style={{ minHeight: '280px', padding: '24px', background: '#fff' }}>
+
+      <ContentInnerStyled>
         <Outlet />
-      </div>
+      </ContentInnerStyled>
     </AntContent>
   );
 }

@@ -1,8 +1,13 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, NavLink, Outlet } from 'react-router-dom';
 import { AuthLayout, MainLayout } from './Layouts';
 import { HomePage, YourRoomsPage, PageNotFound, ProfilePage } from './pages';
 import { LoginForm, SignUpForm } from './features/auth';
-import { CreateRoomForm, RoomList } from './features/room';
+import {
+  CreateRoomForm,
+  RoomActivities,
+  EnrollRoomButton,
+  Room,
+} from './features/room';
 
 function App() {
   return (
@@ -12,6 +17,8 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           {/* Explore existing room */}
           <Route index element={<HomePage />} />
+          {/* Enroll */}
+          <Route path=":roomId" element={<EnrollRoomButton />} />
           {/* display and setting your profile */}
           <Route path="profile" element={<ProfilePage />} />
 
@@ -19,8 +26,8 @@ function App() {
             {/* display your room list */}
             <Route index element={<YourRoomsPage />} />
             {/* display your invidual room */}
-            <Route path=":roomId">
-              <Route index />
+            <Route path=":roomId" element={<Room />}>
+              <Route index element={<RoomActivities />} />
               <Route path="members" element="members" />
             </Route>
             {/* create room */}
