@@ -1,24 +1,22 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { Menu } from 'antd';
+import { Tabs } from 'antd';
 import styled from 'styled-components';
 
 const NavbarStyled = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 `;
+
+const menuItems = [
+  { key: 'activities', label: <NavLink to="">Activities</NavLink> },
+  { key: 'members', label: <NavLink to="members">Members</NavLink> },
+];
 
 function Room() {
   return (
     <>
       <NavbarStyled>
-        <Menu mode="horizontal" defaultActiveFirst>
-          <Menu.Item>
-            <NavLink to="">Activities</NavLink>
-          </Menu.Item>
-          <Menu.Item>
-            <NavLink to="members">Members</NavLink>
-          </Menu.Item>
-        </Menu>
+        <Tabs mode="horizontal" defaultActiveFirst items={menuItems}></Tabs>
       </NavbarStyled>
 
       <Outlet />
