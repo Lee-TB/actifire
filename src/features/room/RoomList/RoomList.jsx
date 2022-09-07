@@ -15,13 +15,6 @@ const DescriptionStyled = styled.p``;
 const OwnerStyled = styled.div``;
 
 function RoomList({ title, rooms }) {
-  // const firestore = useFirestore();
-  // const roomsCollection = collection(firestore, 'rooms');
-  // const roomsQuery = query(roomsCollection);
-  // const { status, data: rooms } = useFirestoreCollectionData(roomsQuery, {
-  //   idField: 'id',
-  // });
-
   return (
     <>
       <Title>{title}</Title>

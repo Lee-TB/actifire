@@ -73,7 +73,7 @@ const userMenu = (
 );
 
 function Header() {
-  const [userDropdownVisible, setUserDropdownVisible] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const { status, data: userData } = useSigninCheck();
 
   return (
@@ -93,8 +93,8 @@ function Header() {
             overlay={userMenu}
             trigger={['click']}
             placement="bottomRight"
-            visible={userDropdownVisible}
-            onVisibleChange={(visible) => setUserDropdownVisible(visible)}
+            open={userDropdownOpen}
+            onOpenChange={(open) => setUserDropdownOpen(open)}
           >
             <div>
               <DownOutlined />

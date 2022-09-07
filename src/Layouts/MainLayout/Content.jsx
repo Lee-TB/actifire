@@ -10,7 +10,6 @@ const ContentInnerStyled = styled.div`
   background: #fff;
   min-height: 280px;
   padding: 24px;
-  padding-top: 0px;
 `;
 
 function Content() {
