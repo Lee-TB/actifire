@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Layout, Dropdown, Avatar, Menu, Button, Space } from 'antd';
 import {
   DownOutlined,
-  GroupOutlined,
+  AppstoreOutlined,
   LogoutOutlined,
   UserOutlined,
   AppstoreAddOutlined,
@@ -56,8 +56,8 @@ const userMenu = (
         key: '0',
       },
       {
-        icon: <GroupOutlined />,
-        label: <Link to="/room">Your room</Link>,
+        icon: <AppstoreOutlined />,
+        label: <Link to="/your-rooms">Your rooms</Link>,
         key: '1',
       },
       {

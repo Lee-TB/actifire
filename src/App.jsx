@@ -16,9 +16,9 @@ function App() {
         {/* For all page have main layout */}
         <Route path="/" element={<MainLayout />}>
           {/* Explore existing room */}
-          <Route index element={<HomePage />} />
+          <Route path="explore" element={<HomePage />} />
           {/* Enroll */}
-          <Route path=":roomId" element={<EnrollRoomButton />} />
+          <Route path="explore/:roomId" element={<EnrollRoomButton />} />
           {/* display and setting your profile */}
           <Route path="profile" element={<ProfilePage />} />
 

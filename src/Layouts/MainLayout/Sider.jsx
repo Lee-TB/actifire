@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { SiFirebase } from 'react-icons/si';
-import { GroupOutlined } from '@ant-design/icons';
+import { ImFire } from 'react-icons/im';
+import { AppstoreOutlined, CompassOutlined } from '@ant-design/icons';
 import { CgProfile } from 'react-icons/cg';
 import styled from 'styled-components';
 import { useSigninCheck } from 'reactfire';
@@ -36,8 +36,13 @@ const LogoTextStyled = styled.span`
 
 const siderMenuItems = [
   {
-    key: 'server',
-    icon: <GroupOutlined />,
+    key: 'explore',
+    icon: <CompassOutlined />,
+    label: <Link to="/explore">Explore</Link>,
+  },
+  {
+    key: 'yourRooms',
+    icon: <AppstoreOutlined />,
     label: <Link to="/your-rooms">Your rooms</Link>,
   },
   {
@@ -60,7 +65,7 @@ function Sider() {
       >
         <Link to="/">
           <LogoContainerStyled>
-            <SiFirebase />
+            <ImFire />
             <LogoTextStyled collapsed={collapsed}>actifire</LogoTextStyled>
           </LogoContainerStyled>
         </Link>
