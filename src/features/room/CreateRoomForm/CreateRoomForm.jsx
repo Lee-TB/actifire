@@ -56,19 +56,26 @@ function CreateRoomForm() {
   const handleFinish = (values) => {
     setIsLoading(true);
     const roomsColRef = collection(firestore, 'rooms');
-    const roomDocRef = doc(roomsColRef); // a new document with generated ID
-    const userDocRef = doc(firestore, `users/${data?.user?.uid}`);
+    const roomDocRef = doc(roomsColRef); // rooms/:roomId (roomId is generated)
+    const memberDocRef = doc(
+      firestore,
+      `rooms/${roomDocRef.id}/members/${data?.user?.uid}`
+    ); // rooms/:roomId/members/:memberId
+    const userDocRef = doc(firestore, `users/${data?.user?.uid}`); // users/:userId (specify userId)
+
+    const owner = {
+      uid: data?.user?.uid,
+      email: data?.user?.email,
+      displayName: data?.user?.displayName,
+      photoURL: data?.user?.photoURL,
+      phoneNumber: data?.user?.phoneNumber,
+    };
+
     const roomData = {
       roomName: values.roomName || '',
       roles: values.roles || defaultRoles,
       roomDescription: values.roomDescription || '',
-      owner: {
-        uid: data?.user?.uid,
-        email: data?.user?.email,
-        displayName: data?.user?.displayName,
-        photoURL: data?.user?.photoURL,
-        phoneNumber: data?.user?.phoneNumber,
-      },
+      owner,
       members: [{ uid: data?.user?.uid }],
       id: roomDocRef.id,
       createAt: serverTimestamp(),
@@ -77,6 +84,8 @@ function CreateRoomForm() {
     const batch = writeBatch(firestore);
 
     batch.set(roomDocRef, roomData);
+
+    batch.set(memberDocRef, owner);
 
     batch.update(userDocRef, {
       rooms: arrayUnion({ roomId: roomDocRef.id }),
