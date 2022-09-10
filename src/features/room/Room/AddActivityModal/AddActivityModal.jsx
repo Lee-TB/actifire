@@ -30,7 +30,10 @@ function AddActivityModal() {
           form.resetFields();
           // add activities subcollection of a room
           const activityDocRef = doc(
-            collection(firestore, `rooms/${roomId}/activities`)
+            collection(
+              firestore,
+              `rooms/${roomId}/members/${userData.uid}/activities`
+            )
           );
           const { activityName, activityScore } = values;
           const activityData = {
