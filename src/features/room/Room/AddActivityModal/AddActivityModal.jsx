@@ -32,14 +32,14 @@ function AddActivityModal() {
           const activityDocRef = doc(
             collection(firestore, `rooms/${roomId}/activities`)
           );
+
           const { activityName, activityScore } = values;
           const activityData = {
+            activityId: activityDocRef.id,
             roomId,
-            uid: userData.uid,
             activityName,
             activityScore: Number(activityScore),
-            // activityTotalScore: 0,
-            // activityRole: '',
+            creator: userData.uid,
             createAt: serverTimestamp(),
           };
 

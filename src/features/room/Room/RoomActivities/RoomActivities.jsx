@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Table, Select } from 'antd';
-import { collection, doc, query, updateDoc, where } from 'firebase/firestore';
+import { collection, doc, runTransaction } from 'firebase/firestore';
 import {
   useFirestore,
   useFirestoreCollectionData,
@@ -23,6 +23,15 @@ function RoomActivities() {
   const roomDocRef = doc(firestore, 'rooms', roomId);
   const { status: roomStatus, data: roomData } =
     useFirestoreDocData(roomDocRef);
+  const memberDocRef = doc(
+    firestore,
+    `rooms/${roomId}/members/${userData?.uid}`
+  );
+  const { status: memberStatus, data: memberData } = useFirestoreDocData(
+    memberDocRef,
+    { idField: 'memberId' }
+  );
+
   let dataSource = [];
   const columns = [
     {
@@ -67,64 +76,92 @@ function RoomActivities() {
     },
   ];
 
-  // handle function
-  // roleValues {[roleName]: roleCoef}
-  const roleKeyValuePairs = roomData?.roles.reduce((prev, cur) => {
-    const { roleName, roleCoef } = cur;
-    return {
-      ...prev,
-      [roleName]: roleCoef,
-    };
-  }, {});
-
   const handleSelectRole = (roleName) => {
+    const roleKeyValuePairs = roomData?.roles.reduce((prev, cur) => {
+      const { roleName, roleCoef } = cur;
+      return {
+        ...prev,
+        [roleName]: roleCoef,
+      };
+    }, {});
     const { activityId, activityScore } = activityScoreData;
     const roleCoef = Number(roleKeyValuePairs[roleName]);
     const activityTotalScore = roleName ? roleCoef * activityScore : 0;
 
-    const activityDocRef = doc(
+    const memberDocRef = doc(
       firestore,
-      `rooms/${roomId}/activities/${activityId}`
+      `rooms/${roomId}/members/${userData.uid}`
     );
-    updateDoc(activityDocRef, {
-      activityTotalScore,
-      activityRole: roleName,
+
+    runTransaction(firestore, async (transaction) => {
+      const memberDoc = await transaction.get(memberDocRef);
+
+      if (!memberDoc.exists()) {
+        throw 'Document does not exist!';
+      }
+
+      const activities = memberDoc.data().activities;
+      transaction.update(memberDocRef, {
+        activities: {
+          ...activities,
+          [activityId]: {
+            activityId,
+            activityTotalScore,
+            activityRole: roleName,
+          },
+        },
+      });
     })
       .then(() => {
-        console.log('update total score success');
+        console.log('Transaction update total score successfully committed!');
       })
       .catch((error) => {
-        console.log(error);
+        console.log('Transaction update total score failed: ', error);
       });
   };
 
-  // listen and get all activity data
+  //*** Realtime list all activities */
   const activitesCollection = collection(
     firestore,
     `rooms/${roomId}/activities`
   );
-
-  const activitesQuery = query(
-    activitesCollection,
-    where('uid', '==', userData?.uid || 'ifNotMatch')
-  );
-
   const { status: activitiesStatus, data: activitiesData } =
-    useFirestoreCollectionData(activitesQuery, {
+    useFirestoreCollectionData(activitesCollection, {
       idField: 'activityId',
     });
 
-  // asign to data source
-  if (activitiesData) {
-    dataSource = activitiesData.map((activity, index) => {
+  if (
+    activitiesStatus === 'success' &&
+    memberStatus === 'success' &&
+    userData
+  ) {
+    const activitiesMergeMemberData = activitiesData.map((activity) => {
+      const { activityId } = activity;
+      let activityRole = '';
+      let activityTotalScore = 0;
+      if (memberData?.hasOwnProperty('activities')) {
+        activityRole = memberData?.activities?.[activityId].activityRole;
+        activityTotalScore =
+          memberData?.activities?.[activityId].activityTotalScore;
+      }
+
+      return {
+        ...activity,
+        activityRole,
+        activityTotalScore,
+      };
+    });
+
+    dataSource = activitiesMergeMemberData.map((activity, index) => {
       const {
         activityId,
         activityName,
-        activityScore,
         createAt,
-        activityTotalScore,
+        activityScore,
         activityRole,
+        activityTotalScore,
       } = activity;
+
       return {
         key: activityId,
         stt: index + 1,
@@ -137,7 +174,7 @@ function RoomActivities() {
           </time>
         ),
         activityScore,
-        activityTotalScore,
+        activityTotalScore: activityTotalScore || 0,
         activityChooseRole: (
           <Select
             value={activityRole || ''}
@@ -161,6 +198,8 @@ function RoomActivities() {
         ),
       };
     });
+  } else {
+    dataSource = [];
   }
 
   return (
