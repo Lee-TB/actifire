@@ -16,7 +16,7 @@ function Room() {
   return (
     <>
       <NavbarStyled>
-        <Tabs mode="horizontal" defaultActiveFirst items={menuItems}></Tabs>
+        <Tabs mode="horizontal" items={menuItems}></Tabs>
       </NavbarStyled>
 
       <Outlet />

@@ -5,7 +5,7 @@ import { LoginForm, SignUpForm } from './features/auth';
 import {
   CreateRoomForm,
   RoomActivities,
-  EnrollRoomButton,
+  EnrolRoomButton,
   Room,
 } from './features/room';
 
@@ -17,8 +17,23 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           {/* Explore existing room */}
           <Route path="explore" element={<HomePage />} />
-          {/* Enroll */}
-          <Route path="explore/:roomId" element={<EnrollRoomButton />} />
+          {/* Enrol */}
+          <Route
+            path="explore/:roomId"
+            element={
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <EnrolRoomButton size="large">
+                  Enrol to this room
+                </EnrolRoomButton>
+              </div>
+            }
+          />
           {/* display and setting your profile */}
           <Route path="profile" element={<ProfilePage />} />
 

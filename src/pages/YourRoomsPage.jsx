@@ -9,6 +9,12 @@ import { Button } from 'antd';
 import { RoomList } from '~/features/room';
 import { Spin } from '~/components';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const ButtonContainerStyled = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 function YourRoomsPage() {
   const firestore = useFirestore();
@@ -23,11 +29,13 @@ function YourRoomsPage() {
 
   if (!userData?.signedIn) {
     return (
-      <>
+      <ButtonContainerStyled>
         <Link to="/login">
-          <Button>Login to view rooms</Button>
+          <Button type="primary" size="large">
+            Login to view rooms
+          </Button>
         </Link>
-      </>
+      </ButtonContainerStyled>
     );
   }
 

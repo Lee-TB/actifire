@@ -1,20 +1,34 @@
 import React from 'react';
-import { List, Card, Typography } from 'antd';
+import { List, Card, Typography, Badge } from 'antd';
 import { Link } from 'react-router-dom';
 import { formatDateTime } from '~/utils/format/date';
 import styled from 'styled-components';
 const { Title } = Typography;
 
+const CardTitleStyled = styled.h4`
+  margin-top: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const CreateAtStyled = styled.div`
   font-size: 12px;
   font-style: italic;
+  color: rgba(0, 0, 0, 0.7);
 `;
 
-const DescriptionStyled = styled.p``;
+const DescriptionStyled = styled.p`
+  min-height: 88px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
 
 const OwnerStyled = styled.div``;
 
-function RoomList({ title, rooms }) {
+function RoomList({ title, rooms, mode, signedIn }) {
   return (
     <>
       <Title>{title}</Title>
@@ -26,30 +40,67 @@ function RoomList({ title, rooms }) {
         dataSource={rooms}
         renderItem={(room) => (
           <List.Item>
-            <Link to={`${room?.id}`}>
-              <Card
-                title={
-                  <>
-                    {room?.roomName}
-                    <CreateAtStyled>
-                      Create at:{' '}
-                      <time>
-                        {formatDateTime(
-                          new Date(room?.createAt?.seconds * 1000)
-                        )}
-                      </time>
-                    </CreateAtStyled>
-                  </>
-                }
-              >
-                <DescriptionStyled>{room?.roomDescription}</DescriptionStyled>
-                <OwnerStyled>
-                  {(room?.owner?.displayName || room?.owner?.email) &&
-                    'Createtor: '}
-                  {room?.owner?.displayName || room?.owner?.email}
-                </OwnerStyled>
-              </Card>
-            </Link>
+            {mode === 'explore' && signedIn && room?.isEnroled ? (
+              <Link to={`/your-rooms/${room?.id}`}>
+                <Badge.Ribbon text="Enroled" color="purple">
+                  <Card
+                    title={
+                      <>
+                        <CardTitleStyled title={room?.roomName}>
+                          {room?.roomName}
+                        </CardTitleStyled>
+
+                        <CreateAtStyled>
+                          <span>Create at: </span>
+                          <time>
+                            {formatDateTime(
+                              new Date(room?.createAt?.seconds * 1000)
+                            )}
+                          </time>
+                        </CreateAtStyled>
+                      </>
+                    }
+                  >
+                    <DescriptionStyled>
+                      {room?.roomDescription}
+                    </DescriptionStyled>
+                    <OwnerStyled>
+                      {(room?.owner?.displayName || room?.owner?.email) &&
+                        'Createtor: '}
+                      {room?.owner?.displayName || room?.owner?.email}
+                    </OwnerStyled>
+                  </Card>
+                </Badge.Ribbon>
+              </Link>
+            ) : (
+              <Link to={`${room?.id}`}>
+                <Card
+                  title={
+                    <>
+                      <CardTitleStyled title={room?.roomName}>
+                        {room?.roomName}
+                      </CardTitleStyled>
+
+                      <CreateAtStyled>
+                        <span>Create at: </span>
+                        <time>
+                          {formatDateTime(
+                            new Date(room?.createAt?.seconds * 1000)
+                          )}
+                        </time>
+                      </CreateAtStyled>
+                    </>
+                  }
+                >
+                  <DescriptionStyled>{room?.roomDescription}</DescriptionStyled>
+                  <OwnerStyled>
+                    {(room?.owner?.displayName || room?.owner?.email) &&
+                      'Createtor: '}
+                    {room?.owner?.displayName || room?.owner?.email}
+                  </OwnerStyled>
+                </Card>
+              </Link>
+            )}
           </List.Item>
         )}
       />
