@@ -25,15 +25,12 @@ function AddActivityModal() {
     form
       .validateFields()
       .then((values) => {
-        if (userData) {
+        if (userStatus === 'success' && userData) {
           // handle add activity
           form.resetFields();
           // add activities subcollection of a room
           const activityDocRef = doc(
-            collection(
-              firestore,
-              `rooms/${roomId}/members/${userData.uid}/activities`
-            )
+            collection(firestore, `rooms/${roomId}/activities`)
           );
           const { activityName, activityScore } = values;
           const activityData = {
@@ -41,8 +38,8 @@ function AddActivityModal() {
             uid: userData.uid,
             activityName,
             activityScore: Number(activityScore),
-            activityTotalScore: 0,
-            activityRole: '',
+            // activityTotalScore: 0,
+            // activityRole: '',
             createAt: serverTimestamp(),
           };
 
