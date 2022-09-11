@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { Tabs } from 'antd';
+import { Menu } from 'antd';
 import styled from 'styled-components';
 
 const NavbarStyled = styled.div`
@@ -16,7 +16,7 @@ function Room() {
   return (
     <>
       <NavbarStyled>
-        <Tabs mode="horizontal" items={menuItems}></Tabs>
+        <Menu mode="horizontal" items={menuItems}></Menu>
       </NavbarStyled>
 
       <Outlet />
