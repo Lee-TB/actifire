@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Table, Select } from 'antd';
-import { collection, doc, runTransaction } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  runTransaction,
+  serverTimestamp,
+} from 'firebase/firestore';
 import {
   useFirestore,
   useFirestoreCollectionData,
@@ -95,13 +100,19 @@ function RoomActivities() {
 
     runTransaction(firestore, async (transaction) => {
       const memberDoc = await transaction.get(memberDocRef);
-
       if (!memberDoc.exists()) {
-        throw 'Document does not exist!';
+        throw 'memberDoc does not exist!';
       }
-
       const activities = memberDoc.data().activities;
+      const allTotalScore = memberDoc.data().allTotalScore || 0;
+      const prevActivityTotalScore =
+        activities?.[activityId]?.activityTotalScore || 0;
+      // recompute allTotalScore (-) prev (+) current activityTotalScore which has just selected
+      const newAllTotalScore =
+        allTotalScore - prevActivityTotalScore + activityTotalScore;
+
       transaction.update(memberDocRef, {
+        allTotalScore: newAllTotalScore,
         activities: {
           ...activities,
           [activityId]: {
@@ -110,6 +121,7 @@ function RoomActivities() {
             activityRole: roleName,
           },
         },
+        updateAt: serverTimestamp(),
       });
     })
       .then(() => {
@@ -204,10 +216,21 @@ function RoomActivities() {
 
   return (
     <>
-      {
-        /* owner feature */
-        roomData?.owner?.uid === userData?.uid && <AddActivityModal />
-      }
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: '8px',
+        }}
+      >
+        {
+          /* owner feature */
+          roomData?.owner?.uid === userData?.uid && <AddActivityModal />
+        }
+        <div>
+          <strong>All score: {memberData?.allTotalScore}</strong>
+        </div>
+      </div>
       <TableContainerStyled>
         <Table columns={columns} dataSource={dataSource} />
       </TableContainerStyled>

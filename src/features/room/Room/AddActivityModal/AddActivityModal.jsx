@@ -4,11 +4,6 @@ import { Modal, Button, Form, Input, message } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { serverTimestamp, setDoc, doc, collection } from 'firebase/firestore';
 import { useUser, useFirestore } from 'reactfire';
-import styled from 'styled-components';
-
-const ModalGroupStyled = styled.div`
-  margin-bottom: 8px;
-`;
 
 function AddActivityModal() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,7 +62,7 @@ function AddActivityModal() {
   };
 
   return (
-    <ModalGroupStyled>
+    <>
       <Button type="primary" onClick={showModal} icon={<PlusCircleOutlined />}>
         Add activity
       </Button>
@@ -102,7 +97,7 @@ function AddActivityModal() {
           </Form.Item>
         </Form>
       </Modal>
-    </ModalGroupStyled>
+    </>
   );
 }
 
