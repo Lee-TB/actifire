@@ -204,7 +204,10 @@ function RoomActivities() {
 
   return (
     <>
-      <AddActivityModal />
+      {
+        /* owner feature */
+        roomData?.owner?.uid === userData?.uid && <AddActivityModal />
+      }
       <TableContainerStyled>
         <Table columns={columns} dataSource={dataSource} />
       </TableContainerStyled>
