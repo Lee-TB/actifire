@@ -140,9 +140,9 @@ function RoomActivities() {
       let activityRole = '';
       let activityTotalScore = 0;
       if (memberData?.hasOwnProperty('activities')) {
-        activityRole = memberData?.activities?.[activityId].activityRole;
+        activityRole = memberData?.activities?.[activityId]?.activityRole;
         activityTotalScore =
-          memberData?.activities?.[activityId].activityTotalScore;
+          memberData?.activities?.[activityId]?.activityTotalScore;
       }
 
       return {
