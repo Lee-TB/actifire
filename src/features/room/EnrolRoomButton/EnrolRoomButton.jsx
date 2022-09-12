@@ -50,7 +50,7 @@ function EnrolRoomButton({ children, ...props }) {
         .then(() => {
           message.success('enrol success');
           setIsLoading(false);
-          navigate(`/your-rooms/${roomId}`);
+          navigate(`/your-rooms/${roomId}/activities`);
         })
         .catch((error) => {
           message.error('enrol failure');

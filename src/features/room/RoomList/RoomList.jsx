@@ -32,17 +32,49 @@ function RoomList({ title, rooms, mode, signedIn }) {
   return (
     <>
       <Title>{title}</Title>
-      <List
-        grid={{
-          gutter: 16,
-          column: 4,
-        }}
-        dataSource={rooms}
-        renderItem={(room) => (
-          <List.Item>
-            {mode === 'explore' && signedIn && room?.isEnroled ? (
-              <Link to={`/your-rooms/${room?.id}/activities`}>
-                <Badge.Ribbon text="You are in this room" color="purple">
+      {mode === 'your-rooms' /**This is list for your rooms page */ ? (
+        <List
+          grid={{
+            gutter: 16,
+            column: 4,
+          }}
+          dataSource={rooms}
+          renderItem={(room) => (
+            <List.Item>
+              {signedIn && room?.isEnroled ? (
+                <Link to={`/your-rooms/${room?.id}/activities`}>
+                  <Badge.Ribbon text="You are in this room" color="purple">
+                    <Card
+                      title={
+                        <>
+                          <CardTitleStyled title={room?.roomName}>
+                            {room?.roomName}
+                          </CardTitleStyled>
+
+                          <CreateAtStyled>
+                            <span>Create at: </span>
+                            <time>
+                              {formatDateTime(
+                                new Date(room?.createAt?.seconds * 1000)
+                              )}
+                            </time>
+                          </CreateAtStyled>
+                        </>
+                      }
+                    >
+                      <DescriptionStyled>
+                        {room?.roomDescription}
+                      </DescriptionStyled>
+                      <OwnerStyled>
+                        {(room?.owner?.displayName || room?.owner?.email) &&
+                          'Createtor: '}
+                        {room?.owner?.displayName || room?.owner?.email}
+                      </OwnerStyled>
+                    </Card>
+                  </Badge.Ribbon>
+                </Link>
+              ) : (
+                <Link to={`${room?.id}/activities`}>
                   <Card
                     title={
                       <>
@@ -70,40 +102,87 @@ function RoomList({ title, rooms, mode, signedIn }) {
                       {room?.owner?.displayName || room?.owner?.email}
                     </OwnerStyled>
                   </Card>
-                </Badge.Ribbon>
-              </Link>
-            ) : (
-              <Link to={`${room?.id}/activities`}>
-                <Card
-                  title={
-                    <>
-                      <CardTitleStyled title={room?.roomName}>
-                        {room?.roomName}
-                      </CardTitleStyled>
+                </Link>
+              )}
+            </List.Item>
+          )}
+        />
+      ) : mode === 'explore' /**This is list for explore page */ ? (
+        <List
+          grid={{
+            gutter: 16,
+            column: 4,
+          }}
+          dataSource={rooms}
+          renderItem={(room) => (
+            <List.Item>
+              {signedIn && room?.isEnroled ? (
+                <Link to={`/your-rooms/${room?.id}/activities`}>
+                  <Badge.Ribbon text="You are in this room" color="purple">
+                    <Card
+                      title={
+                        <>
+                          <CardTitleStyled title={room?.roomName}>
+                            {room?.roomName}
+                          </CardTitleStyled>
 
-                      <CreateAtStyled>
-                        <span>Create at: </span>
-                        <time>
-                          {formatDateTime(
-                            new Date(room?.createAt?.seconds * 1000)
-                          )}
-                        </time>
-                      </CreateAtStyled>
-                    </>
-                  }
-                >
-                  <DescriptionStyled>{room?.roomDescription}</DescriptionStyled>
-                  <OwnerStyled>
-                    {(room?.owner?.displayName || room?.owner?.email) &&
-                      'Createtor: '}
-                    {room?.owner?.displayName || room?.owner?.email}
-                  </OwnerStyled>
-                </Card>
-              </Link>
-            )}
-          </List.Item>
-        )}
-      />
+                          <CreateAtStyled>
+                            <span>Create at: </span>
+                            <time>
+                              {formatDateTime(
+                                new Date(room?.createAt?.seconds * 1000)
+                              )}
+                            </time>
+                          </CreateAtStyled>
+                        </>
+                      }
+                    >
+                      <DescriptionStyled>
+                        {room?.roomDescription}
+                      </DescriptionStyled>
+                      <OwnerStyled>
+                        {(room?.owner?.displayName || room?.owner?.email) &&
+                          'Createtor: '}
+                        {room?.owner?.displayName || room?.owner?.email}
+                      </OwnerStyled>
+                    </Card>
+                  </Badge.Ribbon>
+                </Link>
+              ) : (
+                <Link to={`${room?.id}/enrol`}>
+                  <Card
+                    title={
+                      <>
+                        <CardTitleStyled title={room?.roomName}>
+                          {room?.roomName}
+                        </CardTitleStyled>
+
+                        <CreateAtStyled>
+                          <span>Create at: </span>
+                          <time>
+                            {formatDateTime(
+                              new Date(room?.createAt?.seconds * 1000)
+                            )}
+                          </time>
+                        </CreateAtStyled>
+                      </>
+                    }
+                  >
+                    <DescriptionStyled>
+                      {room?.roomDescription}
+                    </DescriptionStyled>
+                    <OwnerStyled>
+                      {(room?.owner?.displayName || room?.owner?.email) &&
+                        'Createtor: '}
+                      {room?.owner?.displayName || room?.owner?.email}
+                    </OwnerStyled>
+                  </Card>
+                </Link>
+              )}
+            </List.Item>
+          )}
+        />
+      ) : null}
     </>
   );
 }

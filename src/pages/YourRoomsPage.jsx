@@ -41,7 +41,7 @@ function YourRoomsPage() {
 
   return (
     <Spin spinning={status === 'loading'}>
-      <RoomList title="Your rooms" rooms={rooms} />
+      <RoomList mode="your-rooms" title="Your rooms" rooms={rooms} />
     </Spin>
   );
 }

@@ -102,7 +102,7 @@ function CreateRoomForm() {
         message.success('Create room successful');
         console.log('Update user data success.');
         setIsLoading(false);
-        navigate(`/your-rooms/${roomDocRef.id}`);
+        navigate(`/your-rooms/${roomDocRef.id}/activities`);
       })
       .catch((error) => {
         message.error(error);
