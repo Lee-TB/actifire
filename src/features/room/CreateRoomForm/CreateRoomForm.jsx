@@ -85,7 +85,12 @@ function CreateRoomForm() {
 
     batch.set(roomDocRef, roomData);
 
-    batch.set(memberDocRef, owner);
+    batch.set(memberDocRef, {
+      uid: owner?.uid,
+      allTotalScore: 0,
+      createAt: serverTimestamp(),
+      updateAt: serverTimestamp(),
+    });
 
     batch.update(userDocRef, {
       rooms: arrayUnion({ roomId: roomDocRef.id }),
