@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { ImFire } from 'react-icons/im';
 import { AppstoreOutlined, CompassOutlined } from '@ant-design/icons';
@@ -41,7 +41,7 @@ const siderMenuItems = [
     label: <Link to="/explore">Explore</Link>,
   },
   {
-    key: 'yourRooms',
+    key: 'your-rooms',
     icon: <AppstoreOutlined />,
     label: <Link to="/your-rooms">Your rooms</Link>,
   },
@@ -55,6 +55,7 @@ const siderMenuItems = [
 function Sider() {
   const [collapsed, setCollapsed] = useState(false);
   const { data: userData } = useSigninCheck();
+  const location = useLocation();
 
   return (
     <>
@@ -69,7 +70,13 @@ function Sider() {
             <LogoTextStyled collapsed={collapsed}>actifire</LogoTextStyled>
           </LogoContainerStyled>
         </Link>
-        <Menu items={siderMenuItems} mode="inline" />
+        <Menu
+          items={siderMenuItems}
+          mode="inline"
+          selectedKeys={location.pathname.slice(
+            location.pathname.lastIndexOf('/') + 1
+          )}
+        />
       </SiderStyled>
     </>
   );

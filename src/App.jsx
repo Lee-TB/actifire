@@ -42,7 +42,7 @@ function App() {
             <Route index element={<YourRoomsPage />} />
             {/* display your invidual room */}
             <Route path=":roomId" element={<Room />}>
-              <Route index element={<RoomActivities />} />
+              <Route path="activities" element={<RoomActivities />} />
               <Route path="members" element="members" />
             </Route>
             {/* create room */}

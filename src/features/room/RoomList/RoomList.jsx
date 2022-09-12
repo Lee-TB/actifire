@@ -41,7 +41,7 @@ function RoomList({ title, rooms, mode, signedIn }) {
         renderItem={(room) => (
           <List.Item>
             {mode === 'explore' && signedIn && room?.isEnroled ? (
-              <Link to={`/your-rooms/${room?.id}`}>
+              <Link to={`/your-rooms/${room?.id}/activities`}>
                 <Badge.Ribbon text="You are in this room" color="purple">
                   <Card
                     title={
@@ -73,7 +73,7 @@ function RoomList({ title, rooms, mode, signedIn }) {
                 </Badge.Ribbon>
               </Link>
             ) : (
-              <Link to={`${room?.id}`}>
+              <Link to={`${room?.id}/activities`}>
                 <Card
                   title={
                     <>
