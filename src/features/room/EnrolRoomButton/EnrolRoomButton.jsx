@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { Button, message } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFirestore, useSigninCheck } from 'reactfire';
-import { doc, arrayUnion, writeBatch } from 'firebase/firestore';
+import {
+  doc,
+  arrayUnion,
+  writeBatch,
+  serverTimestamp,
+} from 'firebase/firestore';
+
 function EnrolRoomButton({ children, ...props }) {
   const [isLoading, setIsLoading] = useState(false);
   const params = useParams();
@@ -31,10 +37,7 @@ function EnrolRoomButton({ children, ...props }) {
         memberDocRef,
         {
           uid: data?.user?.uid,
-          email: data?.user?.email,
-          displayName: data?.user?.displayName,
-          photoURL: data?.user?.photoURL,
-          phoneNumber: data?.user?.phoneNumber,
+          createAt: serverTimestamp(),
         },
         { merge: true }
       );
