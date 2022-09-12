@@ -5,10 +5,8 @@ import {
   useSigninCheck,
 } from 'reactfire';
 import { collection, query, where } from 'firebase/firestore';
-import { Button } from 'antd';
 import { RoomList } from '~/features/room';
-import { Spin } from '~/components';
-import { Link } from 'react-router-dom';
+import { Spin, LoginToViewButton } from '~/components';
 import styled from 'styled-components';
 
 const ButtonContainerStyled = styled.div`
@@ -30,11 +28,7 @@ function YourRoomsPage() {
   if (!userData?.signedIn) {
     return (
       <ButtonContainerStyled>
-        <Link to="/login">
-          <Button type="primary" size="large">
-            Login to view rooms
-          </Button>
-        </Link>
+        <LoginToViewButton>Login to view Your rooms</LoginToViewButton>
       </ButtonContainerStyled>
     );
   }
