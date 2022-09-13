@@ -14,7 +14,7 @@ import {
   useUser,
 } from 'reactfire';
 
-import { TableContainerStyled } from './RoomActivities.style';
+import { TableContainerStyled, ControllerStyled } from './RoomActivities.style';
 import { AddActivityModal } from '~/features/room';
 import { formatDateTime } from '~/utils/format/date';
 
@@ -218,21 +218,17 @@ function RoomActivities() {
   return (
     <>
       <Title>Activities</Title>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginBottom: '8px',
-        }}
-      >
-        {
-          /* owner feature */
-          roomData?.owner?.uid === userData?.uid && <AddActivityModal />
-        }
+      <ControllerStyled>
+        <div>
+          {
+            /* owner feature */
+            roomData?.owner?.uid === userData?.uid && <AddActivityModal />
+          }
+        </div>
         <div>
           <strong>All score: {memberData?.allTotalScore}</strong>
         </div>
-      </div>
+      </ControllerStyled>
       <TableContainerStyled>
         <Table columns={columns} dataSource={dataSource} />
       </TableContainerStyled>

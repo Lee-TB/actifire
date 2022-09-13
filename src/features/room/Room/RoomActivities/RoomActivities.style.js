@@ -4,4 +4,10 @@ const TableContainerStyled = styled.div`
   border: 1px solid #ccc;
 `;
 
-export { TableContainerStyled };
+const ControllerStyled = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+
+export { TableContainerStyled, ControllerStyled };
