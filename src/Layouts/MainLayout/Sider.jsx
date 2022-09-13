@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Layout, Menu, Divider } from 'antd';
-import { SiFirebase } from 'react-icons/si';
-import { BiGroup } from 'react-icons/bi';
+import { Link, useLocation } from 'react-router-dom';
+import { Layout, Menu } from 'antd';
+import { ImFire } from 'react-icons/im';
+import { AppstoreOutlined, CompassOutlined } from '@ant-design/icons';
 import { CgProfile } from 'react-icons/cg';
-import { SignOut } from '~/features/auth';
 import styled from 'styled-components';
+import { useSigninCheck } from 'reactfire';
 
-const { Sider } = Layout;
+const { Sider: AntSider } = Layout;
 
-const SiderStyled = styled(Sider)`
+const SiderStyled = styled(AntSider)`
   background-color: #f5f5f5;
   border-right: 1px solid #ccc;
   & .ant-layout-sider-trigger {
@@ -31,15 +31,31 @@ const LogoContainerStyled = styled.div`
 
 const LogoTextStyled = styled.span`
   margin-left: 4px;
+  display: ${(props) => (props.collapsed && 'none') || 'ineline'};
 `;
 
 const siderMenuItems = [
-  { key: 'profile', icon: <CgProfile />, label: 'profile' },
-  { key: 'server', icon: <BiGroup />, label: 'server' },
+  {
+    key: 'explore',
+    icon: <CompassOutlined />,
+    label: <Link to="/explore">Explore</Link>,
+  },
+  {
+    key: 'your-rooms',
+    icon: <AppstoreOutlined />,
+    label: <Link to="/your-rooms">Your rooms</Link>,
+  },
+  {
+    key: 'profile',
+    icon: <CgProfile />,
+    label: <Link to="/profile">Profile</Link>,
+  },
 ];
 
-function MySider() {
+function Sider() {
   const [collapsed, setCollapsed] = useState(false);
+  const { data: userData } = useSigninCheck();
+  const location = useLocation();
 
   return (
     <>
@@ -50,16 +66,20 @@ function MySider() {
       >
         <Link to="/">
           <LogoContainerStyled>
-            <SiFirebase />
-            <LogoTextStyled collapsed={collapsed}>actimanager</LogoTextStyled>
+            <ImFire />
+            <LogoTextStyled collapsed={collapsed}>actifire</LogoTextStyled>
           </LogoContainerStyled>
         </Link>
-        <Menu items={siderMenuItems} mode="inline" />
-        <Divider />
-        <SignOut />
+        <Menu
+          items={siderMenuItems}
+          mode="inline"
+          selectedKeys={location.pathname.slice(
+            location.pathname.lastIndexOf('/') + 1
+          )}
+        />
       </SiderStyled>
     </>
   );
 }
 
-export default MySider;
+export default Sider;
