@@ -7,6 +7,7 @@ import {
   RoomActivities,
   EnrolRoomButton,
   Room,
+  RoomMembers,
 } from './features/room';
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
           <Route path="explore" element={<HomePage />} />
           {/* Enrol */}
           <Route
-            path="explore/:roomId"
+            path="explore/:roomId/enrol"
             element={
               <div
                 style={{
@@ -43,7 +44,7 @@ function App() {
             {/* display your invidual room */}
             <Route path=":roomId" element={<Room />}>
               <Route path="activities" element={<RoomActivities />} />
-              <Route path="members" element="members" />
+              <Route path="members" element={<RoomMembers />} />
             </Route>
             {/* create room */}
             <Route path="create-room" element={<CreateRoomForm />} />
