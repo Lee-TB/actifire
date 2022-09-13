@@ -118,7 +118,7 @@ function RoomList({ title, rooms, mode, signedIn }) {
             <List.Item>
               {signedIn && room?.isEnroled ? (
                 <Link to={`/your-rooms/${room?.id}/activities`}>
-                  <Badge.Ribbon text="You are in this room" color="purple">
+                  <Badge.Ribbon text="Joined" color="purple">
                     <Card
                       title={
                         <>
