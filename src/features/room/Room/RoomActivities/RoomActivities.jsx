@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Table, Select } from 'antd';
+import { Table, Select, Typography } from 'antd';
 import {
   collection,
   doc,
@@ -18,6 +18,7 @@ import { TableContainerStyled } from './RoomActivities.style';
 import { AddActivityModal } from '~/features/room';
 import { formatDateTime } from '~/utils/format/date';
 
+const { Title } = Typography;
 const { Option } = Select;
 
 function RoomActivities() {
@@ -216,6 +217,7 @@ function RoomActivities() {
 
   return (
     <>
+      <Title>Activities</Title>
       <div
         style={{
           display: 'flex',
