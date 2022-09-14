@@ -84,7 +84,7 @@ function RoomMembers() {
     membersInUsersData
   ) {
     dataSource = membersInUsersData.map((membersInUsersData, index) => {
-      const { uid, photoURL, name, email } = membersInUsersData;
+      const { uid, photoURL, displayName, email } = membersInUsersData;
       const memberInRoom = membersInRoomData?.find(
         (memberInRoom) => memberInRoom.uid === membersInUsersData.uid
       );
@@ -105,7 +105,7 @@ function RoomMembers() {
             </Space>
           </>
         ),
-        name,
+        name: displayName,
         email,
         score: memberInRoom?.allTotalScore || 0,
       };
