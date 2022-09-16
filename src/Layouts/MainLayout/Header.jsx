@@ -5,14 +5,14 @@ import {
   DownOutlined,
   AppstoreOutlined,
   LogoutOutlined,
-  UserOutlined,
   AppstoreAddOutlined,
 } from '@ant-design/icons';
 import { CgProfile } from 'react-icons/cg';
 import styled from 'styled-components';
+import { useFirestore, useSigninCheck, useFirestoreDocData } from 'reactfire';
+import { doc } from 'firebase/firestore';
 
 import { SignOutButton } from '~/features/auth';
-import { useSigninCheck } from 'reactfire';
 
 const { Header: AntHeader } = Layout;
 
@@ -43,8 +43,8 @@ const SignUpButtonStyled = styled(Button)`
 `;
 
 const AvatarStyled = styled(Avatar)`
-  border: 2px solid var(--ant-primary-color);
   margin-left: 2px;
+  background-color: ${(props) => props.backgroundColor || 'auto'};
 `;
 
 const userMenu = (
@@ -74,7 +74,13 @@ const userMenu = (
 
 function Header() {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  const { status, data: userData } = useSigninCheck();
+  const { status: signedInCheckStatus, data: signedInCheckData } =
+    useSigninCheck();
+  const firestore = useFirestore();
+
+  const userDocRef = doc(firestore, `users/${signedInCheckData?.user?.uid}`);
+  const { status: userStatus, data: userData } =
+    useFirestoreDocData(userDocRef);
 
   return (
     <AntHeaderStyled>
@@ -87,7 +93,7 @@ function Header() {
           New room
         </NewRoomButtonStyled>
       </Link>
-      {userData?.signedIn ? (
+      {signedInCheckData?.signedIn && userStatus === 'success' && userData ? (
         <div style={{ cursor: 'pointer' }}>
           <Dropdown
             overlay={userMenu}
@@ -98,10 +104,19 @@ function Header() {
           >
             <div>
               <DownOutlined />
-              <AvatarStyled
-                src={userData.user.photoURL}
-                icon={<UserOutlined />}
-              />
+              {userData.photoURL ? (
+                <AvatarStyled src={userData.photoURL} />
+              ) : (
+                <AvatarStyled
+                  backgroundColor={userData.avatarColor}
+                  icon={
+                    (!userData.photoURL &&
+                      (userData.displayName[0]?.toUpperCase() ||
+                        userData.email[0]?.toUpperCase())) ||
+                    'U'
+                  }
+                />
+              )}
             </div>
           </Dropdown>
         </div>
