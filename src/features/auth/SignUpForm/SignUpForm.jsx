@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Typography, Spin, message } from 'antd';
 import { AiOutlineMail } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
+import { GrContactInfo } from 'react-icons/gr';
 import styled from 'styled-components';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useAuth, useFirestore } from 'reactfire';
 import { collection, doc, setDoc } from 'firebase/firestore';
-
+import randomColor, { ranInt } from '~/utils/randomColor';
 const { Title } = Typography;
 
 const ButtonStyled = styled(Button)`
@@ -33,7 +34,7 @@ function SignUpForm() {
 
   const handleOnFinish = (values) => {
     setSubmitLoading(true);
-    const { email, password } = values;
+    const { email, password, displayName } = values;
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         message.success('Sign up successful');
@@ -46,9 +47,10 @@ function SignUpForm() {
           uid: user.uid,
           email: user.email || '',
           phoneNumber: user.phoneNumber || '',
-          displayName: user.displayName || '',
+          displayName: displayName || '',
           photoURL: user.photoURL || '',
           rooms: [],
+          avatarColor: randomColor(() => ranInt(50, 150)),
         };
         setDoc(userDoc, userData)
           .then(() => {
@@ -77,6 +79,10 @@ function SignUpForm() {
       >
         <TitleStyled>sign up</TitleStyled>
 
+        <Form.Item name="displayName">
+          <Input prefix={<GrContactInfo />} placeholder="display name" />
+        </Form.Item>
+
         <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>
           <Input prefix={<AiOutlineMail />} placeholder="email" />
         </Form.Item>
@@ -96,6 +102,7 @@ function SignUpForm() {
 
         <Form.Item
           name="confirm"
+          dependencies={['password']}
           rules={[
             { required: true },
             { min: 6, message: 'Password too short!' },
