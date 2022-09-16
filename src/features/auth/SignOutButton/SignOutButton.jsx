@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { signOut } from 'firebase/auth';
 import { useAuth } from 'reactfire';
 import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const ButtonStyled = styled.button`
   cursor: pointer;
@@ -13,10 +14,12 @@ const ButtonStyled = styled.button`
 
 function SignOutButton({ children, ...props }) {
   const auth = useAuth();
+  const navigate = useNavigate();
 
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
+        navigate('/');
         message.success('Sign Out successful');
       })
       .catch((error) => {
