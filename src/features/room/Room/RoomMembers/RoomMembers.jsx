@@ -9,9 +9,13 @@ import {
   useFirestoreDocData,
   useSigninCheck,
 } from 'reactfire';
-import lodash from 'lodash';
+import styled from 'styled-components';
 
 const { Title } = Typography;
+
+const AvatarStyled = styled(Avatar)`
+  background-color: ${(props) => props.backgroundColor || 'auto'};
+`;
 
 const columns = [
   {
@@ -42,12 +46,6 @@ const columns = [
 ];
 
 let dataSource = [];
-
-const getScore = (members, memberId) => {
-  console.log(members);
-  const index = lodash.findIndex(members, { uid: memberId });
-  // return allTotalScore;
-};
 
 function RoomMembers() {
   const { status: signinCheckStatus, data: signinCheckData } = useSigninCheck();
@@ -84,12 +82,11 @@ function RoomMembers() {
     membersInUsersData
   ) {
     dataSource = membersInUsersData.map((membersInUsersData, index) => {
-      const { uid, photoURL, displayName, email } = membersInUsersData;
+      const { uid, photoURL, displayName, email, avatarColor } =
+        membersInUsersData;
       const memberInRoom = membersInRoomData?.find(
         (memberInRoom) => memberInRoom.uid === membersInUsersData.uid
       );
-      // console.log(memberInRoom);
-      console.log(uid, roomData.owner.uid);
 
       return {
         key: uid,
@@ -97,7 +94,20 @@ function RoomMembers() {
         photo: (
           <>
             <Space size="small">
-              <Avatar size="small" src={photoURL} icon={<UserOutlined />} />
+              {photoURL ? (
+                <AvatarStyled size="small" src={photoURL} />
+              ) : (
+                <AvatarStyled
+                  size="small"
+                  backgroundColor={avatarColor}
+                  icon={
+                    (!photoURL &&
+                      (displayName[0]?.toUpperCase() ||
+                        email[0]?.toUpperCase())) ||
+                    'U'
+                  }
+                />
+              )}
               {uid === roomData?.owner?.uid && <Tag color="green">owner</Tag>}
               {uid === signinCheckData?.user?.uid && (
                 <Tag color="purple">me</Tag>
