@@ -1,51 +1,34 @@
 import React from 'react';
-import {
-  useFirestore,
-  useFirestoreCollectionData,
-  useSigninCheck,
-} from 'reactfire';
-import { collection, query, where } from 'firebase/firestore';
-import { RoomList } from '~/features/room';
-import { Spin } from '~/components';
+import styled from 'styled-components';
+import { LoginToViewButton } from '~/components';
+
+const HomePageStyled = styled.div`
+  min-height: 90vh;
+`;
+
+const WelcomeStyled = styled.section`
+  text-align: center;
+  margin: 50px 0;
+`;
+
+const TitleStyled = styled.h1`
+  color: var(--ant-primary-color);
+  font-size: 5rem;
+`;
+
+const Subtitle = styled.h2``;
 
 function HomePage() {
-  const firestore = useFirestore();
-  const roomsCollection = collection(firestore, 'rooms');
-  const roomsQuery = query(roomsCollection);
-  const { status: signinCheckStatus, data: signinCheckData } = useSigninCheck();
-  const { status: roomsStatus, data: roomsData } = useFirestoreCollectionData(
-    roomsQuery,
-    {
-      idField: 'id',
-    }
-  );
-  // check user has signed in
-  const isUserSignedIn =
-    signinCheckStatus === 'success' && signinCheckData?.user?.uid;
-
-  const roomsEnroledData =
-    isUserSignedIn && roomsStatus === 'success'
-      ? roomsData.map((room) => {
-          const isEnroled = room.members.some(
-            (member) => member.uid === signinCheckData?.user?.uid
-          );
-
-          return {
-            ...room,
-            isEnroled,
-          };
-        })
-      : roomsData;
-
   return (
-    <Spin spinning={roomsStatus === 'loading'}>
-      <RoomList
-        title="Explore"
-        mode="explore"
-        rooms={roomsEnroledData}
-        signedIn={isUserSignedIn}
-      />
-    </Spin>
+    <HomePageStyled>
+      <WelcomeStyled>
+        <Subtitle>Welcome to</Subtitle>
+        <TitleStyled>Actifire</TitleStyled>
+        <LoginToViewButton shape="round">
+          Login to get started
+        </LoginToViewButton>
+      </WelcomeStyled>
+    </HomePageStyled>
   );
 }
 
