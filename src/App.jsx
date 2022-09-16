@@ -1,6 +1,6 @@
 import { Routes, Route, NavLink, Outlet } from 'react-router-dom';
 import { AuthLayout, MainLayout } from './Layouts';
-import { HomePage, YourRoomsPage, PageNotFound, ProfilePage } from './pages';
+import { ExplorePage, YourRoomsPage, PageNotFound, ProfilePage } from './pages';
 import { LoginForm, SignUpForm } from './features/auth';
 import {
   CreateRoomForm,
@@ -17,7 +17,7 @@ function App() {
         {/* For all page have main layout */}
         <Route path="/" element={<MainLayout />}>
           {/* Explore existing room */}
-          <Route path="explore" element={<HomePage />} />
+          <Route path="explore" element={<ExplorePage />} />
           {/* Enrol */}
           <Route
             path="explore/:roomId/enrol"
