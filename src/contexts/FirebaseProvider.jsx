@@ -1,10 +1,12 @@
 import React from 'react';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getStorage, connectStorageEmulator } from 'firebase/storage';
 import {
   FirebaseAppProvider,
   AuthProvider,
   FirestoreProvider,
+  StorageProvider,
   useFirebaseApp,
 } from 'reactfire';
 
@@ -22,6 +24,7 @@ function FirebaseConfig({ children }) {
   const app = useFirebaseApp();
   const auth = getAuth(app);
   const firestore = getFirestore(app);
+  const storage = getStorage(app);
 
   if (
     window.location.hostname === 'localhost' ||
@@ -29,11 +32,14 @@ function FirebaseConfig({ children }) {
   ) {
     connectAuthEmulator(auth, 'http://localhost:9099');
     connectFirestoreEmulator(firestore, 'localhost', 8080);
+    connectStorageEmulator(storage, 'localhost', 9199);
   }
 
   return (
     <AuthProvider sdk={auth}>
-      <FirestoreProvider sdk={firestore}>{children}</FirestoreProvider>
+      <StorageProvider sdk={storage}>
+        <FirestoreProvider sdk={firestore}>{children}</FirestoreProvider>
+      </StorageProvider>
     </AuthProvider>
   );
 }
