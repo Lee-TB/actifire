@@ -14,6 +14,7 @@ const WelcomeStyled = styled.section`
 const TitleStyled = styled.h1`
   color: var(--ant-primary-color);
   font-size: 5rem;
+  font-weight: 700;
 `;
 
 const Subtitle = styled.h2``;
