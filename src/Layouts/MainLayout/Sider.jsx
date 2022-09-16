@@ -53,8 +53,7 @@ const siderMenuItems = [
 ];
 
 function Sider() {
-  const [collapsed, setCollapsed] = useState(false);
-  const { data: userData } = useSigninCheck();
+  const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
 
   return (
