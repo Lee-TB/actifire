@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';
 import styled from 'styled-components';
-import { List, Card } from 'antd';
-import { LoginToViewButton } from '~/components';
+import { List, Card, Typography, Button } from 'antd';
+
+const { Title } = Typography;
 
 const HomePageStyled = styled.div`
   min-height: 80vh;
@@ -20,7 +21,11 @@ const TitleStyled = styled.h1`
   font-weight: 700;
 `;
 
-const Subtitle = styled.h2``;
+const Subtitle = styled.h2`
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+`;
 
 const CardShadowStyled = styled.div`
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
@@ -50,7 +55,7 @@ function HomePage() {
   if (signedInStatus === 'success' && signedInData.signedIn) {
     return (
       <HomePageStyled>
-        <h1>Home</h1>
+        <Title>Home</Title>
         <List
           grid={{
             gutter: 16,
@@ -76,9 +81,11 @@ function HomePage() {
       <WelcomeStyled>
         <Subtitle>Welcome to</Subtitle>
         <TitleStyled>Actifire</TitleStyled>
-        <LoginToViewButton shape="round">
-          Login to get started
-        </LoginToViewButton>
+        <Link to="/signup">
+          <Button type="primary" shape="round" size="large">
+            Get started
+          </Button>
+        </Link>
       </WelcomeStyled>
     </HomePageStyled>
   );
