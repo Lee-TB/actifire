@@ -8,7 +8,7 @@ const { Content: AntContent } = Layout;
 
 const ContentInnerStyled = styled.div`
   background: #fff;
-  min-height: 280px;
+  min-height: 80vh;
   padding: 24px;
 `;
 

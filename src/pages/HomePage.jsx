@@ -6,7 +6,7 @@ import { List, Card } from 'antd';
 import { LoginToViewButton } from '~/components';
 
 const HomePageStyled = styled.div`
-  min-height: 90vh;
+  min-height: 80vh;
 `;
 
 const WelcomeStyled = styled.section`

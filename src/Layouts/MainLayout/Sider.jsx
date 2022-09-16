@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Tooltip } from 'antd';
 import { ImFire } from 'react-icons/im';
 import { AppstoreOutlined, CompassOutlined } from '@ant-design/icons';
 import { CgProfile } from 'react-icons/cg';
 import styled from 'styled-components';
-import { useSigninCheck } from 'reactfire';
 
 const { Sider: AntSider } = Layout;
 
@@ -64,10 +63,12 @@ function Sider() {
         onCollapse={(value) => setCollapsed(value)}
       >
         <Link to="/">
-          <LogoContainerStyled>
-            <ImFire />
-            <LogoTextStyled collapsed={collapsed}>actifire</LogoTextStyled>
-          </LogoContainerStyled>
+          <Tooltip title="Actifire" placement="right" color="purple">
+            <LogoContainerStyled>
+              <ImFire />
+              <LogoTextStyled collapsed={collapsed}>actifire</LogoTextStyled>
+            </LogoContainerStyled>
+          </Tooltip>
         </Link>
         <Menu
           items={siderMenuItems}
