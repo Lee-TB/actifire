@@ -4,6 +4,8 @@ import { useSigninCheck } from 'reactfire';
 import styled from 'styled-components';
 import { List, Card, Typography } from 'antd';
 
+import { StartPage } from '~/pages';
+
 const { Title } = Typography;
 
 const HomePageStyled = styled.div`
@@ -47,7 +49,11 @@ const data = [
 function HomePage() {
   const { status: signedInStatus, data: signedInData } = useSigninCheck();
 
-  if (signedInStatus === 'success' && signedInData.signedIn) {
+  if (signedInStatus === 'success' && !signedInData.signedIn) {
+    return <StartPage />;
+  }
+
+  if (signedInStatus === 'success') {
     return (
       <HomePageStyled>
         <Title>Home</Title>

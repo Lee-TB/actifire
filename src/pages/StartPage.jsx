@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import styled from 'styled-components';
 
-const StartPageStyled = styled.div`
-  height: 100vh;
-`;
+const StartPageStyled = styled.div``;
 
 const WelcomeStyled = styled.section`
   text-align: center;

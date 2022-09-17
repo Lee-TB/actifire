@@ -8,14 +8,9 @@ import Footer from './Footer';
 import { Spin } from '~/components';
 
 import { useSigninCheck } from 'reactfire';
-import { StartPage } from '~/pages';
 
 function MainLayout() {
   const { status: signedInStatus, data: signedInData } = useSigninCheck();
-
-  if (signedInStatus === 'success' && !signedInData.signedIn) {
-    return <StartPage />;
-  }
 
   return (
     <Spin spinning={signedInStatus === 'loading'}>
