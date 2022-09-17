@@ -1,11 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
 import { AuthLayout, MainLayout } from './Layouts';
 import {
+  HomePage,
   ExplorePage,
   YourRoomsPage,
   PageNotFound,
   ProfilePage,
-  HomePage,
 } from './pages';
 import { LoginForm, SignUpForm } from './features/auth';
 import {
@@ -24,8 +24,10 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           {/* HomePage */}
           <Route index element={<HomePage />} />
+
           {/* Explore existing room */}
           <Route path="explore" element={<ExplorePage />} />
+
           {/* Enrol */}
           <Route
             path="explore/:roomId/enrol"

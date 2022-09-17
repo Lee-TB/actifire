@@ -2,29 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';
 import styled from 'styled-components';
-import { List, Card, Typography, Button } from 'antd';
+import { List, Card, Typography } from 'antd';
 
 const { Title } = Typography;
 
 const HomePageStyled = styled.div`
   min-height: 80vh;
-`;
-
-const WelcomeStyled = styled.section`
-  text-align: center;
-  margin: 50px 0;
-`;
-
-const TitleStyled = styled.h1`
-  color: var(--ant-primary-color);
-  font-size: 5rem;
-  font-weight: 700;
-`;
-
-const Subtitle = styled.h2`
-  font-size: 2rem;
-  font-weight: 700;
-  margin: 0;
 `;
 
 const CardShadowStyled = styled.div`
@@ -75,20 +58,6 @@ function HomePage() {
       </HomePageStyled>
     );
   }
-
-  return (
-    <HomePageStyled>
-      <WelcomeStyled>
-        <Subtitle>Welcome to</Subtitle>
-        <TitleStyled>Actifire</TitleStyled>
-        <Link to="/signup">
-          <Button type="primary" shape="round" size="large">
-            Get started
-          </Button>
-        </Link>
-      </WelcomeStyled>
-    </HomePageStyled>
-  );
 }
 
 export default HomePage;
