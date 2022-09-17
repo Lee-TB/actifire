@@ -42,14 +42,21 @@ function HomePage() {
         <List
           grid={{
             gutter: 16,
-            column: 3,
+            xxl: 3,
+            xl: 3,
+            lg: 3,
+            md: 2,
+            sm: 2,
+            xs: 1,
           }}
           dataSource={data}
           renderItem={(item) => (
             <List.Item>
               <Link to={item.link}>
                 <CardShadowStyled>
-                  <Card title={item.title}>{item.content}</Card>
+                  <Card title={<Title level={2}>{item.title}</Title>}>
+                    {item.content}
+                  </Card>
                 </CardShadowStyled>
               </Link>
             </List.Item>
