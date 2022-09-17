@@ -16,6 +16,7 @@ const NavbarStyled = styled.div`
 const menuItems = [
   { key: 'activities', label: <NavLink to="activities">Activities</NavLink> },
   { key: 'members', label: <NavLink to="members">Members</NavLink> },
+  { key: 'settings', label: <NavLink to="settings">Settings</NavLink> },
 ];
 
 function Room() {
@@ -61,7 +62,7 @@ function Room() {
           selectedKeys={[
             location.pathname.slice(location.pathname.lastIndexOf('/') + 1),
           ]}
-        ></Menu>
+        />
       </NavbarStyled>
 
       <Outlet />

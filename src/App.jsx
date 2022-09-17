@@ -10,10 +10,11 @@ import {
 import { LoginForm, SignUpForm } from './features/auth';
 import {
   CreateRoomForm,
-  RoomActivities,
   EnrolRoomButton,
   Room,
+  RoomActivities,
   RoomMembers,
+  RoomSettings,
 } from './features/room';
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
             <Route path=":roomId" element={<Room />}>
               <Route path="activities" element={<RoomActivities />} />
               <Route path="members" element={<RoomMembers />} />
+              <Route path="settings" element={<RoomSettings />} />
             </Route>
             {/* create room */}
             <Route path="create-room" element={<CreateRoomForm />} />
