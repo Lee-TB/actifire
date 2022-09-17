@@ -48,12 +48,16 @@ function AuthLayout() {
         {pathname.includes('/login') ? (
           <TextLinkStyled>
             <span>Not a member? </span>
-            <Link to="signup">signup now</Link>
+            <Link style={{ fontWeight: 700 }} to="signup">
+              signup now
+            </Link>
           </TextLinkStyled>
         ) : (
           <TextLinkStyled>
             <span>Already a member? </span>
-            <Link to="login">login now</Link>
+            <Link style={{ fontWeight: 700 }} to="login">
+              login now
+            </Link>
           </TextLinkStyled>
         )}
       </ContentStyled>

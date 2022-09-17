@@ -11,7 +11,19 @@ const HomePageStyled = styled.div`
 `;
 
 const CardShadowStyled = styled.div`
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  &:hover {
+    transform: translate(0, -4px);
+  }
+`;
+
+const CardContentStyled = styled.div`
+  min-height: 88px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 const data = [
@@ -55,7 +67,7 @@ function HomePage() {
               <Link to={item.link}>
                 <CardShadowStyled>
                   <Card title={<Title level={2}>{item.title}</Title>}>
-                    {item.content}
+                    <CardContentStyled>{item.content}</CardContentStyled>
                   </Card>
                 </CardShadowStyled>
               </Link>

@@ -5,6 +5,14 @@ import { formatDateTime } from '~/utils/format/date';
 import styled from 'styled-components';
 const { Title } = Typography;
 
+const CardShadowStyled = styled.div`
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  &:hover {
+    transform: translate(0, -4px);
+  }
+`;
+
 const CardTitleStyled = styled.h4`
   margin-top: 12px;
   white-space: nowrap;
@@ -36,14 +44,50 @@ function RoomList({ title, rooms, mode, signedIn }) {
         <List
           grid={{
             gutter: 16,
-            column: 4,
+            xxl: 3,
+            xl: 3,
+            lg: 3,
+            md: 2,
+            sm: 2,
+            xs: 1,
           }}
           dataSource={rooms}
           renderItem={(room) => (
             <List.Item>
               {signedIn && room?.isEnroled ? (
                 <Link to={`/your-rooms/${room?.id}/activities`}>
-                  <Badge.Ribbon text="You are in this room" color="purple">
+                  <CardShadowStyled>
+                    <Badge.Ribbon text="You are in this room" color="purple">
+                      <Card
+                        title={
+                          <>
+                            <CardTitleStyled title={room?.roomName}>
+                              {room?.roomName}
+                            </CardTitleStyled>
+
+                            <CreateAtStyled>
+                              <time>
+                                {formatDateTime(
+                                  new Date(room?.createAt?.seconds * 1000)
+                                )}
+                              </time>
+                            </CreateAtStyled>
+                          </>
+                        }
+                      >
+                        <DescriptionStyled>
+                          {room?.roomDescription}
+                        </DescriptionStyled>
+                        <OwnerStyled>
+                          {room?.owner?.displayName || room?.owner?.email}
+                        </OwnerStyled>
+                      </Card>
+                    </Badge.Ribbon>
+                  </CardShadowStyled>
+                </Link>
+              ) : (
+                <Link to={`${room?.id}/activities`}>
+                  <CardShadowStyled>
                     <Card
                       title={
                         <>
@@ -52,7 +96,6 @@ function RoomList({ title, rooms, mode, signedIn }) {
                           </CardTitleStyled>
 
                           <CreateAtStyled>
-                            <span>Create at: </span>
                             <time>
                               {formatDateTime(
                                 new Date(room?.createAt?.seconds * 1000)
@@ -66,42 +109,10 @@ function RoomList({ title, rooms, mode, signedIn }) {
                         {room?.roomDescription}
                       </DescriptionStyled>
                       <OwnerStyled>
-                        {(room?.owner?.displayName || room?.owner?.email) &&
-                          'Createtor: '}
                         {room?.owner?.displayName || room?.owner?.email}
                       </OwnerStyled>
                     </Card>
-                  </Badge.Ribbon>
-                </Link>
-              ) : (
-                <Link to={`${room?.id}/activities`}>
-                  <Card
-                    title={
-                      <>
-                        <CardTitleStyled title={room?.roomName}>
-                          {room?.roomName}
-                        </CardTitleStyled>
-
-                        <CreateAtStyled>
-                          <span>Create at: </span>
-                          <time>
-                            {formatDateTime(
-                              new Date(room?.createAt?.seconds * 1000)
-                            )}
-                          </time>
-                        </CreateAtStyled>
-                      </>
-                    }
-                  >
-                    <DescriptionStyled>
-                      {room?.roomDescription}
-                    </DescriptionStyled>
-                    <OwnerStyled>
-                      {(room?.owner?.displayName || room?.owner?.email) &&
-                        'Createtor: '}
-                      {room?.owner?.displayName || room?.owner?.email}
-                    </OwnerStyled>
-                  </Card>
+                  </CardShadowStyled>
                 </Link>
               )}
             </List.Item>
@@ -111,14 +122,50 @@ function RoomList({ title, rooms, mode, signedIn }) {
         <List
           grid={{
             gutter: 16,
-            column: 4,
+            xxl: 3,
+            xl: 3,
+            lg: 3,
+            md: 2,
+            sm: 2,
+            xs: 1,
           }}
           dataSource={rooms}
           renderItem={(room) => (
             <List.Item>
               {signedIn && room?.isEnroled ? (
                 <Link to={`/your-rooms/${room?.id}/activities`}>
-                  <Badge.Ribbon text="Joined" color="purple">
+                  <CardShadowStyled>
+                    <Badge.Ribbon text="Joined" color="purple">
+                      <Card
+                        title={
+                          <>
+                            <CardTitleStyled title={room?.roomName}>
+                              {room?.roomName}
+                            </CardTitleStyled>
+
+                            <CreateAtStyled>
+                              <time>
+                                {formatDateTime(
+                                  new Date(room?.createAt?.seconds * 1000)
+                                )}
+                              </time>
+                            </CreateAtStyled>
+                          </>
+                        }
+                      >
+                        <DescriptionStyled>
+                          {room?.roomDescription}
+                        </DescriptionStyled>
+                        <OwnerStyled>
+                          {room?.owner?.displayName || room?.owner?.email}
+                        </OwnerStyled>
+                      </Card>
+                    </Badge.Ribbon>
+                  </CardShadowStyled>
+                </Link>
+              ) : (
+                <Link to={`${room?.id}/enrol`}>
+                  <CardShadowStyled>
                     <Card
                       title={
                         <>
@@ -127,7 +174,6 @@ function RoomList({ title, rooms, mode, signedIn }) {
                           </CardTitleStyled>
 
                           <CreateAtStyled>
-                            <span>Create at: </span>
                             <time>
                               {formatDateTime(
                                 new Date(room?.createAt?.seconds * 1000)
@@ -141,42 +187,10 @@ function RoomList({ title, rooms, mode, signedIn }) {
                         {room?.roomDescription}
                       </DescriptionStyled>
                       <OwnerStyled>
-                        {(room?.owner?.displayName || room?.owner?.email) &&
-                          'Createtor: '}
                         {room?.owner?.displayName || room?.owner?.email}
                       </OwnerStyled>
                     </Card>
-                  </Badge.Ribbon>
-                </Link>
-              ) : (
-                <Link to={`${room?.id}/enrol`}>
-                  <Card
-                    title={
-                      <>
-                        <CardTitleStyled title={room?.roomName}>
-                          {room?.roomName}
-                        </CardTitleStyled>
-
-                        <CreateAtStyled>
-                          <span>Create at: </span>
-                          <time>
-                            {formatDateTime(
-                              new Date(room?.createAt?.seconds * 1000)
-                            )}
-                          </time>
-                        </CreateAtStyled>
-                      </>
-                    }
-                  >
-                    <DescriptionStyled>
-                      {room?.roomDescription}
-                    </DescriptionStyled>
-                    <OwnerStyled>
-                      {(room?.owner?.displayName || room?.owner?.email) &&
-                        'Createtor: '}
-                      {room?.owner?.displayName || room?.owner?.email}
-                    </OwnerStyled>
-                  </Card>
+                  </CardShadowStyled>
                 </Link>
               )}
             </List.Item>

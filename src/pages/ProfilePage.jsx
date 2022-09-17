@@ -31,6 +31,7 @@ const { Title } = Typography;
 const ContainerStyled = styled.div``;
 
 const AvatarStyled = styled(Avatar)`
+  cursor: default;
   background-color: ${(props) =>
     props.backgroundColor || randomColor(() => ranInt(50, 150))};
 `;

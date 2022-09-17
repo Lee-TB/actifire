@@ -127,7 +127,7 @@ function RoomMembers() {
     <>
       <Title>Other members</Title>
       <div>
-        <Table columns={columns} dataSource={dataSource} />
+        <Table bordered={true} columns={columns} dataSource={dataSource} />
       </div>
     </>
   );

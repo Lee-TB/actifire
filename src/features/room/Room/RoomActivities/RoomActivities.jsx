@@ -319,7 +319,7 @@ function RoomActivities() {
         </div>
       </ControllerStyled>
       <TableContainerStyled>
-        <Table columns={columns} dataSource={dataSource} />
+        <Table bordered={true} columns={columns} dataSource={dataSource} />
       </TableContainerStyled>
     </>
   );
