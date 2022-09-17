@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Table, Select } from 'antd';
+import { Table, Select, Typography, Button, Popconfirm } from 'antd';
 import {
   collection,
   doc,
+  deleteDoc,
   runTransaction,
   serverTimestamp,
 } from 'firebase/firestore';
@@ -14,14 +15,16 @@ import {
   useUser,
 } from 'reactfire';
 
-import { TableContainerStyled } from './RoomActivities.style';
+import { TableContainerStyled, ControllerStyled } from './RoomActivities.style';
 import { AddActivityModal } from '~/features/room';
 import { formatDateTime } from '~/utils/format/date';
+import { useColumnSearchProps } from '../hooks/useColumnSearchProps';
 
+const { Title } = Typography;
 const { Option } = Select;
 
 function RoomActivities() {
-  const [activityScoreData, setActivityScoreData] = useState('');
+  const [activityRow, setActivityRow] = useState('');
   const { status: userStatus, data: userData } = useUser();
   const { roomId } = useParams();
   const firestore = useFirestore();
@@ -48,6 +51,7 @@ function RoomActivities() {
       title: 'Activity name',
       dataIndex: 'activityName',
       key: 'activityName',
+      ...useColumnSearchProps('activityName', 'activity name'),
     },
     {
       title: 'Create at',
@@ -63,11 +67,13 @@ function RoomActivities() {
       title: 'Choose your role',
       dataIndex: 'activityChooseRole',
       key: 'activityChooseRole',
-      onCell: (record, rowIndex) => {
+      onCell: (record) => {
         return {
           onClick: () => {
-            setActivityScoreData({
+            setActivityRow({
+              activityStt: record.stt,
               activityId: record.key,
+              activityName: record.activityName,
               activityScore: record.activityScore,
             });
           },
@@ -81,6 +87,77 @@ function RoomActivities() {
     },
   ];
 
+  if (roomData?.owner?.uid === userData?.uid) {
+    columns.push({
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+      onCell: (record) => {
+        return {
+          onClick: () => {
+            setActivityRow({
+              activityStt: record.stt,
+              activityId: record.key,
+              activityName: record.activityName,
+              activityScore: record.activityScore,
+            });
+          },
+        };
+      },
+    });
+  }
+
+  const handleDelete = (e) => {
+    const { activityId } = activityRow;
+    /** Delete activity Doc */
+    const activityDocRef = doc(
+      firestore,
+      `rooms/${roomId}/activities/${activityId}`
+    );
+    deleteDoc(activityDocRef)
+      .then(() => {
+        console.log(`Delete activity ${activityId} success`);
+      })
+      .catch((e) => {
+        console.log(`Delete activity ${activityId} fail: ${e}`);
+      });
+
+    /** Update members activities and allTotalScore */
+    roomData?.members.forEach((member) => {
+      const memberDocRef = doc(
+        firestore,
+        `rooms/${roomId}/members/${member.uid}`
+      );
+      runTransaction(firestore, async (transaction) => {
+        const memberDoc = await transaction.get(memberDocRef);
+        // update activities
+        const newActivities = memberDoc.data().activities;
+        if (activityId in newActivities) {
+          delete newActivities[activityId]; // delete
+        }
+        transaction.update(memberDocRef, { activities: newActivities });
+
+        // update allTotalScore
+        let newAllTotalScore = 0;
+        Object.values(newActivities).forEach((activity) => {
+          newAllTotalScore += activity.activityTotalScore;
+        });
+        transaction.update(memberDocRef, { allTotalScore: newAllTotalScore });
+      })
+        .then(() => {
+          console.log(
+            `update member ${member.uid} activities & allTotalScore success`
+          );
+        })
+        .catch((e) => {
+          console.log(
+            `update member ${member.uid} activities & allTotalScore failed: `,
+            e
+          );
+        });
+    });
+  };
+
   const handleSelectRole = (roleName) => {
     const roleKeyValuePairs = roomData?.roles.reduce((prev, cur) => {
       const { roleName, roleCoef } = cur;
@@ -89,7 +166,7 @@ function RoomActivities() {
         [roleName]: roleCoef,
       };
     }, {});
-    const { activityId, activityScore } = activityScoreData;
+    const { activityId, activityScore } = activityRow;
     const roleCoef = Number(roleKeyValuePairs[roleName]);
     const activityTotalScore = roleName ? roleCoef * activityScore : 0;
 
@@ -208,6 +285,19 @@ function RoomActivities() {
             })}
           </Select>
         ),
+        action: (
+          <Popconfirm
+            title="Are you sure to delete this activity?"
+            okText="Yes"
+            cancelText="No"
+            placement="topRight"
+            onConfirm={handleDelete}
+          >
+            <Button type="text" danger>
+              Delete
+            </Button>
+          </Popconfirm>
+        ),
       };
     });
   } else {
@@ -216,23 +306,22 @@ function RoomActivities() {
 
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginBottom: '8px',
-        }}
-      >
-        {
-          /* owner feature */
-          roomData?.owner?.uid === userData?.uid && <AddActivityModal />
-        }
+      <Title level={2} style={{ textAlign: 'center' }}>
+        Activities
+      </Title>
+      <ControllerStyled>
+        <div>
+          {
+            /* owner feature */
+            roomData?.owner?.uid === userData?.uid && <AddActivityModal />
+          }
+        </div>
         <div>
           <strong>All score: {memberData?.allTotalScore}</strong>
         </div>
-      </div>
+      </ControllerStyled>
       <TableContainerStyled>
-        <Table columns={columns} dataSource={dataSource} />
+        <Table bordered={true} columns={columns} dataSource={dataSource} />
       </TableContainerStyled>
     </>
   );

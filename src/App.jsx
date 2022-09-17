@@ -1,12 +1,20 @@
-import { Routes, Route, NavLink, Outlet } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AuthLayout, MainLayout } from './Layouts';
-import { HomePage, YourRoomsPage, PageNotFound, ProfilePage } from './pages';
+import {
+  HomePage,
+  ExplorePage,
+  YourRoomsPage,
+  PageNotFound,
+  ProfilePage,
+} from './pages';
 import { LoginForm, SignUpForm } from './features/auth';
 import {
   CreateRoomForm,
-  RoomActivities,
   EnrolRoomButton,
   Room,
+  RoomActivities,
+  RoomMembers,
+  RoomSettings,
 } from './features/room';
 
 function App() {
@@ -15,11 +23,15 @@ function App() {
       <Routes>
         {/* For all page have main layout */}
         <Route path="/" element={<MainLayout />}>
+          {/* HomePage */}
+          <Route index element={<HomePage />} />
+
           {/* Explore existing room */}
-          <Route path="explore" element={<HomePage />} />
+          <Route path="explore" element={<ExplorePage />} />
+
           {/* Enrol */}
           <Route
-            path="explore/:roomId"
+            path="explore/:roomId/enrol"
             element={
               <div
                 style={{
@@ -43,7 +55,8 @@ function App() {
             {/* display your invidual room */}
             <Route path=":roomId" element={<Room />}>
               <Route path="activities" element={<RoomActivities />} />
-              <Route path="members" element="members" />
+              <Route path="members" element={<RoomMembers />} />
+              <Route path="settings" element={<RoomSettings />} />
             </Route>
             {/* create room */}
             <Route path="create-room" element={<CreateRoomForm />} />

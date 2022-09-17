@@ -6,7 +6,7 @@ const { Footer: AntFooter } = Layout;
 function Footer() {
   return (
     <AntFooter style={{ textAlign: 'center' }}>
-      Ant Design ©2018 Created by Ant UED
+      <p>Actifire ©2022 Created by Duc Tran</p>
     </AntFooter>
   );
 }

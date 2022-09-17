@@ -10,9 +10,10 @@ import { Spin } from '~/components';
 import { useSigninCheck } from 'reactfire';
 
 function MainLayout() {
-  const { status } = useSigninCheck();
+  const { status: signedInStatus, data: signedInData } = useSigninCheck();
+
   return (
-    <Spin spinning={status === 'loading'}>
+    <Spin spinning={signedInStatus === 'loading'}>
       <Layout>
         <Sider />
         <Layout>

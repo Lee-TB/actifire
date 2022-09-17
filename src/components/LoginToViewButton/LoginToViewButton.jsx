@@ -5,7 +5,7 @@ import { Button } from 'antd';
 function LoginToViewButton({ children, ...props }) {
   return (
     <Link to="/login">
-      <Button type="primary" size="large" {...props}>
+      <Button shape="round" type="primary" size="large" {...props}>
         {children}
       </Button>
     </Link>
