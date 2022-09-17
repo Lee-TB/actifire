@@ -125,7 +125,9 @@ function RoomMembers() {
 
   return (
     <>
-      <Title>Other members</Title>
+      <Title level={2} style={{ textAlign: 'center' }}>
+        Members
+      </Title>
       <div>
         <Table bordered={true} columns={columns} dataSource={dataSource} />
       </div>

@@ -306,7 +306,9 @@ function RoomActivities() {
 
   return (
     <>
-      <Title>Activities</Title>
+      <Title level={2} style={{ textAlign: 'center' }}>
+        Activities
+      </Title>
       <ControllerStyled>
         <div>
           {
