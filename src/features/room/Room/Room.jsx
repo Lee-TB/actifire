@@ -33,14 +33,18 @@ function Room() {
   }, [roomData?.roomName]);
 
   const saveRoomName = (value) => {
-    updateDoc(doc(firestore, `rooms/${roomId}`), {
-      roomName: value,
-    })
-      .then(() => {
-        message.success('update room name success');
-        setRoomName(value);
+    if (value !== roomName) {
+      updateDoc(doc(firestore, `rooms/${roomId}`), {
+        roomName: value,
       })
-      .catch(message.error('update room name error'));
+        .then(() => {
+          message.success('update room name success');
+          setRoomName(value);
+        })
+        .catch((e) => {
+          message.error('update room name error');
+        });
+    }
   };
 
   return (
