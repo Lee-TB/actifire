@@ -1,6 +1,5 @@
 import React from 'react';
 import { Avatar, Table, Typography, Tag, Space } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
 import { collection, doc, query, where } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 import {
@@ -10,6 +9,7 @@ import {
   useSigninCheck,
 } from 'reactfire';
 import styled from 'styled-components';
+import { useColumnSearchProps } from '../hooks/useColumnSearchProps';
 
 const { Title } = Typography;
 
@@ -17,37 +17,36 @@ const AvatarStyled = styled(Avatar)`
   background-color: ${(props) => props.backgroundColor || 'auto'};
 `;
 
-const columns = [
-  {
-    title: 'STT',
-    dataIndex: 'stt',
-    key: 'stt',
-  },
-  {
-    title: 'Photo',
-    dataIndex: 'photo',
-    key: 'photo',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-  },
-  {
-    title: 'Score',
-    dataIndex: 'score',
-    key: 'score',
-  },
-];
-
-let dataSource = [];
-
 function RoomMembers() {
+  let dataSource = [];
+  const columns = [
+    {
+      title: 'STT',
+      dataIndex: 'stt',
+      key: 'stt',
+    },
+    {
+      title: 'Photo',
+      dataIndex: 'photo',
+      key: 'photo',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      ...useColumnSearchProps('name'),
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Score',
+      dataIndex: 'score',
+      key: 'score',
+    },
+  ];
   const { status: signinCheckStatus, data: signinCheckData } = useSigninCheck();
   const firestore = useFirestore();
   const { roomId } = useParams();

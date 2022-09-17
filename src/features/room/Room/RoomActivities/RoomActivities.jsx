@@ -18,7 +18,7 @@ import {
 import { TableContainerStyled, ControllerStyled } from './RoomActivities.style';
 import { AddActivityModal } from '~/features/room';
 import { formatDateTime } from '~/utils/format/date';
-import { ConsoleSqlOutlined } from '@ant-design/icons';
+import { useColumnSearchProps } from '../hooks/useColumnSearchProps';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -51,6 +51,7 @@ function RoomActivities() {
       title: 'Activity name',
       dataIndex: 'activityName',
       key: 'activityName',
+      ...useColumnSearchProps('activityName', 'activity name'),
     },
     {
       title: 'Create at',
