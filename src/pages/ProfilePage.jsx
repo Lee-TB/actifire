@@ -19,7 +19,7 @@ import {
   useSigninCheck,
 } from 'reactfire';
 import { doc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
+// import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
 import styled from 'styled-components';
 
 import { Spin } from '~/components';
@@ -79,8 +79,8 @@ function ProfilePage() {
   const [isEditDisplayName, setIsEditDisplayName] = useState(false);
   const inputRef = useRef(null);
   const firestore = useFirestore();
-  const storage = useStorage();
-  const auth = useAuth();
+  // const storage = useStorage();
+  // const auth = useAuth();
   const { status: signinCheckStatus, data: signinCheckData } = useSigninCheck();
   const userDocRef = doc(firestore, `users/${signinCheckData?.user?.uid}`);
   const { status: userStatus, data: userData } =
