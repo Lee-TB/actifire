@@ -59,7 +59,14 @@ function App() {
               <Route path="settings" element={<RoomSettings />} />
             </Route>
             {/* create room */}
-            <Route path="create-room" element={<CreateRoomForm />} />
+            <Route
+              path="create-room"
+              element={
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <CreateRoomForm />
+                </div>
+              }
+            />
           </Route>
         </Route>
 

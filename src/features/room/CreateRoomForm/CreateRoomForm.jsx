@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { Spin } from '~/components';
 
 const FomContainer = styled.div`
-  max-width: 500px;
+  width: 500px;
 `;
 
 const FormTitle = styled.h1`
