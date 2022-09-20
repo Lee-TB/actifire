@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Table, Select, Typography, Button, Popconfirm } from 'antd';
 import {
@@ -19,11 +19,14 @@ import { TableContainerStyled, ControllerStyled } from './RoomActivities.style';
 import { AddActivityModal } from '~/features/room';
 import { formatDateTime } from '~/utils/format/date';
 import { useColumnSearchProps } from '../hooks/useColumnSearchProps';
+import { Spin } from '~/components';
+import { InputTimes } from './components';
 
 const { Title } = Typography;
 const { Option } = Select;
 
 function RoomActivities() {
+  const [isLoading, setIsLoading] = useState(false);
   const [activityRow, setActivityRow] = useState('');
   const { status: userStatus, data: userData } = useUser();
   const { roomId } = useParams();
@@ -46,6 +49,7 @@ function RoomActivities() {
       title: 'STT',
       dataIndex: 'stt',
       key: 'stt',
+      ...useColumnSearchProps('stt', 'STT'),
     },
     {
       title: 'Activity name',
@@ -67,18 +71,11 @@ function RoomActivities() {
       title: 'Choose your role',
       dataIndex: 'activityChooseRole',
       key: 'activityChooseRole',
-      onCell: (record) => {
-        return {
-          onClick: () => {
-            setActivityRow({
-              activityStt: record.stt,
-              activityId: record.key,
-              activityName: record.activityName,
-              activityScore: record.activityScore,
-            });
-          },
-        };
-      },
+    },
+    {
+      title: 'Number of times',
+      dataIndex: 'times',
+      key: 'times',
     },
     {
       title: 'Total score',
@@ -92,22 +89,11 @@ function RoomActivities() {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
-      onCell: (record) => {
-        return {
-          onClick: () => {
-            setActivityRow({
-              activityStt: record.stt,
-              activityId: record.key,
-              activityName: record.activityName,
-              activityScore: record.activityScore,
-            });
-          },
-        };
-      },
     });
   }
 
   const handleDelete = (e) => {
+    setIsLoading(true);
     const { activityId } = activityRow;
     /** Delete activity Doc */
     const activityDocRef = doc(
@@ -117,9 +103,11 @@ function RoomActivities() {
     deleteDoc(activityDocRef)
       .then(() => {
         console.log(`Delete activity ${activityId} success`);
+        setIsLoading(false);
       })
       .catch((e) => {
         console.log(`Delete activity ${activityId} fail: ${e}`);
+        setIsLoading(false);
       });
 
     /** Update members activities and allTotalScore */
@@ -158,18 +146,21 @@ function RoomActivities() {
     });
   };
 
-  const handleSelectRole = (roleName) => {
-    const roleKeyValuePairs = roomData?.roles.reduce((prev, cur) => {
-      const { roleName, roleCoef } = cur;
-      return {
-        ...prev,
-        [roleName]: roleCoef,
-      };
-    }, {});
-    const { activityId, activityScore } = activityRow;
-    const roleCoef = Number(roleKeyValuePairs[roleName]);
-    const activityTotalScore = roleName ? roleCoef * activityScore : 0;
+  const roleKeyValuePairs = roomData?.roles.reduce((prev, cur) => {
+    const { roleName, roleCoef } = cur;
+    return {
+      ...prev,
+      [roleName]: roleCoef,
+    };
+  }, {});
 
+  const handleSubmitTimes = (activityTimes) => {
+    setIsLoading(true);
+    const { activityId, activityRoleName, activityScore } = activityRow;
+    const roleCoef = Number(roleKeyValuePairs[activityRoleName]);
+    const activityTotalScore = activityRoleName
+      ? roleCoef * activityScore * activityTimes
+      : 0;
     const memberDocRef = doc(
       firestore,
       `rooms/${roomId}/members/${userData.uid}`
@@ -187,7 +178,57 @@ function RoomActivities() {
       // recompute allTotalScore (-) prev (+) current activityTotalScore which has just selected
       const newAllTotalScore =
         allTotalScore - prevActivityTotalScore + activityTotalScore;
+      transaction.update(memberDocRef, {
+        allTotalScore: newAllTotalScore,
+        activities: {
+          ...activities,
+          [activityId]: {
+            activityId,
+            activityTotalScore,
+            activityRole: activityRoleName,
+            activityTimes: activityTimes || 1,
+          },
+        },
+        updateAt: serverTimestamp(),
+      });
+    })
+      .then(() => {
+        console.log(
+          'Transaction update number of times successfully committed!'
+        );
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log('Transaction update number of times failed: ', error);
+        setIsLoading(false);
+      });
+  };
 
+  const handleSelectRole = (roleName) => {
+    setIsLoading(true);
+    const { activityId, activityScore, activityTimes } = activityRow;
+
+    const roleCoef = Number(roleKeyValuePairs[roleName]);
+    const activityTotalScore = roleName
+      ? roleCoef * activityScore * (activityTimes || 1)
+      : 0;
+    const memberDocRef = doc(
+      firestore,
+      `rooms/${roomId}/members/${userData.uid}`
+    );
+
+    runTransaction(firestore, async (transaction) => {
+      const memberDoc = await transaction.get(memberDocRef);
+      if (!memberDoc.exists()) {
+        throw 'memberDoc does not exist!';
+      }
+      const activities = memberDoc.data().activities;
+      const allTotalScore = memberDoc.data().allTotalScore || 0;
+      const prevActivityTotalScore =
+        activities?.[activityId]?.activityTotalScore || 0;
+      // recompute allTotalScore (-) prev (+) current activityTotalScore which has just selected
+      const newAllTotalScore =
+        allTotalScore - prevActivityTotalScore + activityTotalScore;
       transaction.update(memberDocRef, {
         allTotalScore: newAllTotalScore,
         activities: {
@@ -196,6 +237,7 @@ function RoomActivities() {
             activityId,
             activityTotalScore,
             activityRole: roleName,
+            activityTimes: !roleName ? 0 : activityTimes || 1,
           },
         },
         updateAt: serverTimestamp(),
@@ -203,9 +245,11 @@ function RoomActivities() {
     })
       .then(() => {
         console.log('Transaction update total score successfully committed!');
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log('Transaction update total score failed: ', error);
+        setIsLoading(false);
       });
   };
 
@@ -228,16 +272,19 @@ function RoomActivities() {
       const { activityId } = activity;
       let activityRole = '';
       let activityTotalScore = 0;
+      let activityTimes = 0;
       if (memberData?.hasOwnProperty('activities')) {
         activityRole = memberData?.activities?.[activityId]?.activityRole;
         activityTotalScore =
           memberData?.activities?.[activityId]?.activityTotalScore;
+        activityTimes = memberData?.activities?.[activityId]?.activityTimes;
       }
 
       return {
         ...activity,
         activityRole,
         activityTotalScore,
+        activityTimes,
       };
     });
 
@@ -248,6 +295,7 @@ function RoomActivities() {
         createAt,
         activityScore,
         activityRole,
+        activityTimes,
         activityTotalScore,
       } = activity;
 
@@ -272,7 +320,7 @@ function RoomActivities() {
             }}
             onChange={handleSelectRole}
           >
-            <Option key="" value="">
+            <Option key="select role" value={''}>
               {'select role'}
             </Option>
             {roomData?.roles.map((role) => {
@@ -284,6 +332,13 @@ function RoomActivities() {
               );
             })}
           </Select>
+        ),
+        times: (
+          <InputTimes
+            onChangeDebounce={handleSubmitTimes}
+            value={activityTimes}
+            min="0"
+          />
         ),
         action: (
           <Popconfirm
@@ -321,7 +376,26 @@ function RoomActivities() {
         </div>
       </ControllerStyled>
       <TableContainerStyled>
-        <Table bordered={true} columns={columns} dataSource={dataSource} />
+        <Spin spinning={isLoading}>
+          <Table
+            bordered={true}
+            columns={columns}
+            dataSource={dataSource}
+            onRow={(record) => ({
+              onClick: () => {
+                setActivityRow({
+                  activityStt: record.stt,
+                  activityId: record.key,
+                  activityName: record.activityName,
+                  activityScore: record.activityScore,
+                  activityTotalScore: record.activityTotalScore,
+                  activityTimes: record.times.props.value,
+                  activityRoleName: record.activityChooseRole.props.value,
+                });
+              },
+            })}
+          />
+        </Spin>
       </TableContainerStyled>
     </>
   );

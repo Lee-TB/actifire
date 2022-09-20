@@ -28,7 +28,10 @@ import randomColor, { ranInt } from '~/utils/randomColor';
 
 const { Title } = Typography;
 
-const ContainerStyled = styled.div``;
+const ContainerStyled = styled.div`
+  width: 800px;
+  margin: 0 auto;
+`;
 
 const AvatarStyled = styled(Avatar)`
   cursor: default;
@@ -151,12 +154,12 @@ function ProfilePage() {
 
   return (
     <Spin spinning={signinCheckStatus === 'loading'}>
-      <Title>Profile</Title>
       <ContainerStyled>
+        <Title>Profile</Title>
         {userStatus === 'success' && (
           <>
             <Row gutter={[8, 8]}>
-              <Col span={24} lg={4}>
+              <Col span={24} lg={6}>
                 <Space direction="vertical">
                   <AvatarStyled
                     size={128}
@@ -174,7 +177,7 @@ function ProfilePage() {
                   </Upload> */}
                 </Space>
               </Col>
-              <Col span={24} lg={20}>
+              <Col span={24} lg={18}>
                 <DisplayNameStyled>
                   {isEditDisplayName ? (
                     <InputGroup>
