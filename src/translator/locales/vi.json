@@ -1,6 +1,9 @@
 {
   "translation": {
     "welcome": "Chào mừng đến với bình nguyên vô tận",
-    "New room": "Tạo phòng"
+    "New room": "Tạo phòng",
+    "Home": "Trang chủ",
+    "Sign Up": "Đăng ký",
+    "Login": "Đăng nhập"
   }
 }

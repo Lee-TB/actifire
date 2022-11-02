@@ -153,10 +153,10 @@ function Header() {
       ) : (
         <Space>
           <Link to="signup">
-            <SignUpButtonStyled>Sign Up</SignUpButtonStyled>
+            <SignUpButtonStyled>{t('Sign Up')}</SignUpButtonStyled>
           </Link>
           <Link to="login">
-            <Button type="primary">Login</Button>
+            <Button type="primary">{t('Login')}</Button>
           </Link>
         </Space>
       )}

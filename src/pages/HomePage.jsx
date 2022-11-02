@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';
 import styled from 'styled-components';
 import { List, Card, Typography } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 import { StartPage } from '~/pages';
 
@@ -47,6 +48,7 @@ const data = [
 ];
 
 function HomePage() {
+  const { t } = useTranslation();
   const { status: signedInStatus, data: signedInData } = useSigninCheck();
 
   if (signedInStatus === 'success' && !signedInData.signedIn) {
@@ -56,7 +58,7 @@ function HomePage() {
   if (signedInStatus === 'success') {
     return (
       <HomePageStyled>
-        <Title>Home</Title>
+        <Title>{t('Home')}</Title>
         <List
           grid={{
             gutter: 16,
