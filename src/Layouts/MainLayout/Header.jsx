@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Dropdown, Avatar, Menu, Button, Space } from 'antd';
+import { Layout, Dropdown, Avatar, Menu, Button, Space, Select } from 'antd';
 import {
   DownOutlined,
   AppstoreOutlined,
@@ -11,10 +11,13 @@ import { CgProfile } from 'react-icons/cg';
 import styled from 'styled-components';
 import { useFirestore, useSigninCheck, useFirestoreDocData } from 'reactfire';
 import { doc } from 'firebase/firestore';
+import { useTranslation } from 'react-i18next';
 
 import { SignOutButton } from '~/features/auth';
+import { useEffect } from 'react';
 
 const { Header: AntHeader } = Layout;
+const { Option } = Select;
 
 const AntHeaderStyled = styled(AntHeader)`
   background-color: #f5f5f5;
@@ -72,7 +75,21 @@ const userMenu = (
   />
 );
 
+const languages = [
+  { code: 'vi', native: 'Tiếng Việt' },
+  { code: 'en', native: 'English' },
+];
+
 function Header() {
+  const { t, i18n } = useTranslation();
+  useEffect(() => {
+    i18n.changeLanguage('vi'); // set default language
+  }, []);
+
+  const handleTrans = (code) => {
+    i18n.changeLanguage(code);
+  };
+
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const { status: signedInCheckStatus, data: signedInCheckData } =
     useSigninCheck();
@@ -84,15 +101,28 @@ function Header() {
 
   return (
     <AntHeaderStyled>
-      <Link to="/your-rooms/create-room">
-        <NewRoomButtonStyled
-          icon={<AppstoreAddOutlined />}
-          type="link"
-          shape="round"
+      <div>
+        <Link to="/your-rooms/create-room">
+          <NewRoomButtonStyled
+            icon={<AppstoreAddOutlined />}
+            type="link"
+            shape="round"
+          >
+            {t('New room')}
+          </NewRoomButtonStyled>
+        </Link>
+
+        <Select
+          style={{ width: 120, marginLeft: 10 }}
+          onChange={(value) => handleTrans(value)}
+          defaultValue={'vi'}
         >
-          New room
-        </NewRoomButtonStyled>
-      </Link>
+          {languages.map((lang) => {
+            return <Option value={lang.code}>{lang.native}</Option>;
+          })}
+        </Select>
+      </div>
+
       {signedInCheckData?.signedIn && userStatus === 'success' && userData ? (
         <div style={{ cursor: 'pointer' }}>
           <Dropdown
