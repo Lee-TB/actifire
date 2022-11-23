@@ -25,6 +25,7 @@ import styled from 'styled-components';
 import { Spin } from '~/components';
 import { LoginToViewButton } from '../components';
 import randomColor, { ranInt } from '~/utils/randomColor';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
@@ -78,6 +79,7 @@ const InputGroup = styled.div`
 `;
 
 function ProfilePage() {
+  const { t } = useTranslation();
   const [displayNameState, setdisplayNameState] = useState('Unknow');
   const [isEditDisplayName, setIsEditDisplayName] = useState(false);
   const inputRef = useRef(null);
@@ -155,7 +157,7 @@ function ProfilePage() {
   return (
     <Spin spinning={signinCheckStatus === 'loading'}>
       <ContainerStyled>
-        <Title>Profile</Title>
+        <Title>{t("Profile")}</Title>
         {userStatus === 'success' && (
           <>
             <Row gutter={[8, 8]}>

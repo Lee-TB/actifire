@@ -4,10 +4,13 @@ import { AiOutlineMail } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { GrContactInfo } from 'react-icons/gr';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useAuth, useFirestore } from 'reactfire';
 import { collection, doc, setDoc } from 'firebase/firestore';
+
 import randomColor, { ranInt } from '~/utils/randomColor';
+
 const { Title } = Typography;
 
 const ButtonStyled = styled(Button)`
@@ -31,6 +34,7 @@ function SignUpForm() {
   const [submitLoading, setSubmitLoading] = useState(false);
   const auth = useAuth();
   const firestore = useFirestore();
+  const { t } = useTranslation();
 
   const handleOnFinish = (values) => {
     setSubmitLoading(true);
@@ -77,10 +81,10 @@ function SignUpForm() {
         validateMessages={validateMessages}
         onFinish={handleOnFinish}
       >
-        <TitleStyled>sign up</TitleStyled>
+        <TitleStyled>{t('Sign Up')}</TitleStyled>
 
         <Form.Item name="displayName">
-          <Input prefix={<GrContactInfo />} placeholder="display name" />
+          <Input prefix={<GrContactInfo />} placeholder={t("display name")} />
         </Form.Item>
 
         <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>
@@ -96,7 +100,7 @@ function SignUpForm() {
         >
           <Input.Password
             prefix={<RiLockPasswordLine />}
-            placeholder="password"
+            placeholder={t("password")}
           />
         </Form.Item>
 
@@ -105,7 +109,7 @@ function SignUpForm() {
           dependencies={['password']}
           rules={[
             { required: true },
-            { min: 6, message: 'Password too short!' },
+            { min: 6, message: t("Password too short!") },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (!value || getFieldValue('password') === value) {
@@ -121,7 +125,7 @@ function SignUpForm() {
         >
           <Input.Password
             prefix={<RiLockPasswordLine />}
-            placeholder="confirm password"
+            placeholder={t("confirm password")}
           />
         </Form.Item>
 
@@ -131,7 +135,7 @@ function SignUpForm() {
             htmlType="submit"
             loading={submitLoading}
           >
-            sign up now
+            {t("signup now")}
           </ButtonStyled>
         </Form.Item>
       </Form>

@@ -50,31 +50,6 @@ const AvatarStyled = styled(Avatar)`
   background-color: ${(props) => props.backgroundColor || 'auto'};
 `;
 
-const userMenu = (
-  <Menu
-    items={[
-      {
-        icon: <CgProfile />,
-        label: <Link to="/profile">Your profile</Link>,
-        key: '0',
-      },
-      {
-        icon: <AppstoreOutlined />,
-        label: <Link to="/your-rooms">Your rooms</Link>,
-        key: '1',
-      },
-      {
-        type: 'divider',
-      },
-      {
-        icon: <LogoutOutlined />,
-        label: <SignOutButton>Log Out</SignOutButton>,
-        key: '2',
-      },
-    ]}
-  />
-);
-
 const languages = [
   { code: 'vi', native: 'Tiếng Việt' },
   { code: 'en', native: 'English' },
@@ -98,6 +73,32 @@ function Header() {
   const userDocRef = doc(firestore, `users/${signedInCheckData?.user?.uid}`);
   const { status: userStatus, data: userData } =
     useFirestoreDocData(userDocRef);
+
+
+    const userMenu = (
+      <Menu
+        items={[
+          {
+            icon: <CgProfile />,
+            label: <Link to="/profile">{t("Your profile")}</Link>,
+            key: '0',
+          },
+          {
+            icon: <AppstoreOutlined />,
+            label: <Link to="/your-rooms">{t("Your rooms")}</Link>,
+            key: '1',
+          },
+          {
+            type: 'divider',
+          },
+          {
+            icon: <LogoutOutlined />,
+            label: <SignOutButton>{t("Log Out")}</SignOutButton>,
+            key: '2',
+          },
+        ]}
+      />
+    );
 
   return (
     <AntHeaderStyled>

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useSigninCheck } from 'reactfire';
 
@@ -32,6 +33,12 @@ function AuthLayout() {
   const location = useLocation();
   const { pathname } = location;
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    i18n.changeLanguage('vi'); // set default language
+  }, [i18n]);
+
 
   useEffect(() => {
     if (userData && userData.signedIn) {
@@ -47,16 +54,16 @@ function AuthLayout() {
         </Spin>
         {pathname.includes('/login') ? (
           <TextLinkStyled>
-            <span>Not a member? </span>
+            <span>{t('Not a member?')} </span>
             <Link style={{ fontWeight: 700 }} to="signup">
-              signup now
+              {t("signup now")}
             </Link>
           </TextLinkStyled>
         ) : (
           <TextLinkStyled>
-            <span>Already a member? </span>
+            <span>{t("Already a member?")} </span>
             <Link style={{ fontWeight: 700 }} to="login">
-              login now
+              {t("login now")}
             </Link>
           </TextLinkStyled>
         )}

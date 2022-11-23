@@ -29,23 +29,7 @@ const CardContentStyled = styled.div`
   overflow: hidden;
 `;
 
-const data = [
-  {
-    title: 'Explore',
-    content: 'View all available rooms now',
-    link: '/explore',
-  },
-  {
-    title: 'Your rooms',
-    content: 'The rooms you joined or created',
-    link: '/your-rooms',
-  },
-  {
-    title: 'Profile',
-    content: 'View your profile information',
-    link: '/profile',
-  },
-];
+
 
 function HomePage() {
   const { t } = useTranslation();
@@ -54,6 +38,24 @@ function HomePage() {
   if (signedInStatus === 'success' && !signedInData.signedIn) {
     return <StartPage />;
   }
+
+  const data = [
+    {
+      title: t("Explore"),
+      content: t("View all available rooms now"),
+      link: "/explore",
+    },
+    {
+      title: t("Your rooms"),
+      content: t("The rooms you joined or created"),
+      link: "/your-rooms",
+    },
+    {
+      title: t("Profile"),
+      content: t("View your profile information"),
+      link: "/profile",
+    },
+  ];
 
   if (signedInStatus === 'success') {
     return (

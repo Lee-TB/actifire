@@ -14,7 +14,7 @@ function MainLayout() {
   const { status: signedInStatus, data: signedInData } = useSigninCheck();
   const navigate = useNavigate();
   
-  if(!signedInData?.signedIn) {
+  if(!signedInData?.signedIn && signedInStatus === "success") {
     navigate("/login")
   }
 

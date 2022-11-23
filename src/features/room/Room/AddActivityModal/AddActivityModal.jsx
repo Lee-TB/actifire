@@ -4,8 +4,10 @@ import { Modal, Button, Form, Input, message } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { serverTimestamp, setDoc, doc, collection } from 'firebase/firestore';
 import { useUser, useFirestore } from 'reactfire';
+import { useTranslation } from 'react-i18next';
 
 function AddActivityModal() {
+  const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const { status: userStatus, data: userData } = useUser();
@@ -64,32 +66,32 @@ function AddActivityModal() {
   return (
     <>
       <Button type="primary" onClick={showModal} icon={<PlusCircleOutlined />}>
-        Add activity
+        {t('Add activity')}
       </Button>
 
       <Modal
-        title="Add activity you want to room"
+        title={t("Add activity you want to room")}
         open={isModalOpen}
         onCancel={handleCancel}
         footer={[
           <Button key="addButton" onClick={handleOk} type="primary">
-            Add
+            {t("Add")}
           </Button>,
           <Button key="cancelButton" onClick={handleCancel}>
-            Cancel
+            {t("Cancel")}
           </Button>,
         ]}
       >
         <Form layout="vertical" form={form}>
           <Form.Item
-            label="Activity name"
+            label={t("Activity name")}
             name="activityName"
             rules={[{ required: true, message: 'please fill activity name' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="score"
+            label={t("Activity score")}
             name="activityScore"
             rules={[{ required: true, message: 'please fill activity score' }]}
           >

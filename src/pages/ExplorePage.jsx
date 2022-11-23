@@ -7,8 +7,10 @@ import {
 import { collection, query, where } from 'firebase/firestore';
 import { RoomList } from '~/features/room';
 import { Spin } from '~/components';
+import { useTranslation } from 'react-i18next';
 
 function ExplorePage() {
+  const { t } = useTranslation();
   const firestore = useFirestore();
   const roomsCollection = collection(firestore, 'rooms');
   const roomsQuery = query(roomsCollection);
@@ -40,7 +42,7 @@ function ExplorePage() {
   return (
     <Spin spinning={roomsStatus === 'loading'}>
       <RoomList
-        title="Explore"
+        title={t('Explore')}
         mode="explore"
         rooms={roomsEnroledData}
         signedIn={isUserSignedIn}

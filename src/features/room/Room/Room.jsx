@@ -6,20 +6,12 @@ import styled from 'styled-components';
 
 import { doc, updateDoc } from 'firebase/firestore';
 import { useFirestore, useFirestoreDocData, useUser } from 'reactfire';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
-const NavbarStyled = styled.div`
-  margin-bottom: 8px;
-`;
-
-const menuItems = [
-  { key: 'activities', label: <NavLink to="activities">Activities</NavLink> },
-  { key: 'members', label: <NavLink to="members">Members</NavLink> },
-  { key: 'settings', label: <NavLink to="settings">Settings</NavLink> },
-];
-
 function Room() {
+  const { t } = useTranslation();
   const location = useLocation();
   const { roomId } = useParams();
   const firestore = useFirestore();
@@ -48,6 +40,12 @@ function Room() {
     }
   };
 
+  const menuItems = [
+    { key: 'activities', label: <NavLinkStyled to="activities">{t("activities")}</NavLinkStyled> },
+    { key: 'members', label: <NavLinkStyled to="members">{t("members")}</NavLinkStyled> },
+    { key: 'settings', label: <NavLinkStyled to="settings">{t("settings")}</NavLinkStyled> },
+  ];
+
   return (
     <>
       {userStatus === 'success' && userData?.uid === roomData?.owner?.uid ? (
@@ -69,5 +67,13 @@ function Room() {
     </>
   );
 }
+
+const NavbarStyled = styled.div`
+  margin-bottom: 8px;
+`;
+
+const NavLinkStyled = styled(NavLink)`
+  text-transform: capitalize;
+`
 
 export default Room;

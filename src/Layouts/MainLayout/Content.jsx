@@ -3,6 +3,7 @@ import { Layout, Breadcrumb } from 'antd';
 import { HomeFilled } from '@ant-design/icons';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const { Content: AntContent } = Layout;
 
@@ -13,6 +14,7 @@ const ContentInnerStyled = styled.div`
 `;
 
 function Content() {
+  const { t } = useTranslation();
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter((i) => i);
   const breadcrumbItems = pathSnippets.map((pathSnippet, index) => {
@@ -21,7 +23,7 @@ function Content() {
 
     return (
       <Breadcrumb.Item key={pathSnippet}>
-        <Link to={url}>{text}</Link>
+        <Link to={url}>{t(text)}</Link>
       </Breadcrumb.Item>
     );
   });

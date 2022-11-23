@@ -4,6 +4,7 @@ import {
   useFirestoreCollectionData,
   useSigninCheck,
 } from 'reactfire';
+import { useTranslation } from 'react-i18next';
 import { collection, query, where } from 'firebase/firestore';
 import { RoomList } from '~/features/room';
 import { Spin, LoginToViewButton } from '~/components';
@@ -17,6 +18,7 @@ const ButtonContainerStyled = styled.div`
 function YourRoomsPage() {
   const firestore = useFirestore();
   const { data: userData } = useSigninCheck();
+  const { t } = useTranslation();
 
   const roomsCollection = collection(firestore, 'rooms');
   const roomsQuery = query(
@@ -35,7 +37,7 @@ function YourRoomsPage() {
 
   return (
     <Spin spinning={status === 'loading'}>
-      <RoomList mode="your-rooms" title="Your rooms" rooms={rooms} />
+      <RoomList mode="your-rooms" title={t("Your rooms")} rooms={rooms} />
     </Spin>
   );
 }
