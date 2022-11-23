@@ -4,6 +4,14 @@
     "New room": "Tạo phòng",
     "Home": "Trang chủ",
     "Sign Up": "Đăng ký",
-    "Login": "Đăng nhập"
+    "Login": "Đăng nhập",
+    "Explore": "Khám phá",
+    "Your rooms": "Phòng của bạn",
+    "Profile": "Hồ sơ",
+    "login": "đăng nhập",
+    "login now": "đăng nhập ngay",
+    "Login successful": "Đăng nhập thành công",
+    "password": "mật khẩu",
+    "Password too short!": "Mật khẩu quá ngắn!"
   }
 }

@@ -4,6 +4,14 @@
     "New room": "New room",
     "Home": "Home",
     "Sign Up": "Sign Up",
-    "Login": "Login"
+    "Login": "Login",
+    "Explore": "Explore",
+    "Your rooms": "Your rooms",
+    "Profile": "Profile",
+    "login": "login",
+    "login now": "login now",
+    "Login successful": "Login successful",
+    "password": "password",
+    "Password too short!": "Password too short!"
   }
 }

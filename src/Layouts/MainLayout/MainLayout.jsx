@@ -8,9 +8,15 @@ import Footer from './Footer';
 import { Spin } from '~/components';
 
 import { useSigninCheck } from 'reactfire';
+import { useNavigate } from 'react-router-dom';
 
 function MainLayout() {
   const { status: signedInStatus, data: signedInData } = useSigninCheck();
+  const navigate = useNavigate();
+  
+  if(!signedInData?.signedIn) {
+    navigate("/login")
+  }
 
   return (
     <Spin spinning={signedInStatus === 'loading'}>

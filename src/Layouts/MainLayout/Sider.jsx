@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Layout, Menu, Tooltip } from 'antd';
 import { ImFire } from 'react-icons/im';
 import { AppstoreOutlined, CompassOutlined } from '@ant-design/icons';
@@ -33,27 +34,28 @@ const LogoTextStyled = styled.span`
   display: ${(props) => (props.collapsed && 'none') || 'ineline'};
 `;
 
-const siderMenuItems = [
-  {
-    key: 'explore',
-    icon: <CompassOutlined />,
-    label: <Link to="/explore">Explore</Link>,
-  },
-  {
-    key: 'your-rooms',
-    icon: <AppstoreOutlined />,
-    label: <Link to="/your-rooms">Your rooms</Link>,
-  },
-  {
-    key: 'profile',
-    icon: <CgProfile />,
-    label: <Link to="/profile">Profile</Link>,
-  },
-];
-
 function Sider() {
   const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
+  const { t, i18n } = useTranslation();
+
+  const siderMenuItems = [
+    {
+      key: 'explore',
+      icon: <CompassOutlined />,
+      label: <Link to="/explore">{t(`Explore`)}</Link>,
+    },
+    {
+      key: 'your-rooms',
+      icon: <AppstoreOutlined />,
+      label: <Link to="/your-rooms">{t(`Your rooms`)}</Link>,
+    },
+    {
+      key: 'profile',
+      icon: <CgProfile />,
+      label: <Link to="/profile">{t(`Profile`)}</Link>,
+    },
+  ];
 
   return (
     <>

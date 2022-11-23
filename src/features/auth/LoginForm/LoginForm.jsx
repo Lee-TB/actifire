@@ -5,6 +5,7 @@ import { RiLockPasswordLine } from 'react-icons/ri';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useAuth } from 'reactfire';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
@@ -28,13 +29,14 @@ const validateMessages = {
 function LoginForm() {
   const auth = useAuth();
   const [submitLoading, setSubmitLoading] = useState(false);
+  const { t } = useTranslation();
 
   const handleOnFinish = (values) => {
     setSubmitLoading(true);
     const { email, password } = values;
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        message.success('Login successful');
+        message.success(t("Login successful"));
         console.log('Login successful');
         setSubmitLoading(false);
       })
@@ -57,7 +59,7 @@ function LoginForm() {
         validateMessages={validateMessages}
         onFinish={handleOnFinish}
       >
-        <TitleStyled>login</TitleStyled>
+        <TitleStyled>{t('login')}</TitleStyled>
         <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>
           <Input prefix={<AiOutlineMail />} placeholder="email" />
         </Form.Item>
@@ -65,12 +67,12 @@ function LoginForm() {
           name="password"
           rules={[
             { required: true },
-            { min: 6, message: 'Password too short!' },
+            { min: 6, message: t("Password too short!") },
           ]}
         >
           <Input.Password
             prefix={<RiLockPasswordLine />}
-            placeholder="password"
+            placeholder={t("password")}
           />
         </Form.Item>
         <Form.Item>
@@ -79,7 +81,7 @@ function LoginForm() {
             htmlType="submit"
             loading={submitLoading}
           >
-            login now
+            {t("login now")}
           </ButtonStyled>
         </Form.Item>
       </Form>
