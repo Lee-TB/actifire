@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';
 import styled from 'styled-components';
 import { List, Card, Typography } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 import { StartPage } from '~/pages';
 
@@ -28,35 +29,38 @@ const CardContentStyled = styled.div`
   overflow: hidden;
 `;
 
-const data = [
-  {
-    title: 'Explore',
-    content: 'View all available rooms now',
-    link: '/explore',
-  },
-  {
-    title: 'Your rooms',
-    content: 'The rooms you joined or created',
-    link: '/your-rooms',
-  },
-  {
-    title: 'Profile',
-    content: 'View your profile information',
-    link: '/profile',
-  },
-];
+
 
 function HomePage() {
+  const { t } = useTranslation();
   const { status: signedInStatus, data: signedInData } = useSigninCheck();
 
   if (signedInStatus === 'success' && !signedInData.signedIn) {
     return <StartPage />;
   }
 
+  const data = [
+    {
+      title: t("Explore"),
+      content: t("View all available rooms now"),
+      link: "/explore",
+    },
+    {
+      title: t("Your rooms"),
+      content: t("The rooms you joined or created"),
+      link: "/your-rooms",
+    },
+    {
+      title: t("Profile"),
+      content: t("View your profile information"),
+      link: "/profile",
+    },
+  ];
+
   if (signedInStatus === 'success') {
     return (
       <HomePageStyled>
-        <Title>Home</Title>
+        <Title>{t('Home')}</Title>
         <List
           grid={{
             gutter: 16,

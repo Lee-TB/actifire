@@ -10,6 +10,7 @@ import {
 } from 'reactfire';
 import styled from 'styled-components';
 import { useColumnSearchProps } from '../hooks/useColumnSearchProps';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
@@ -18,6 +19,7 @@ const AvatarStyled = styled(Avatar)`
 `;
 
 function RoomMembers() {
+  const { t } = useTranslation();
   let dataSource = [];
   const columns = [
     {
@@ -26,23 +28,19 @@ function RoomMembers() {
       key: 'stt',
     },
     {
-      title: 'Photo',
-      dataIndex: 'photo',
-      key: 'photo',
+      title: t('Member'),
+      dataIndex: 'member',
+      key: 'member',
     },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      ...useColumnSearchProps('name'),
-    },
+
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
+      ...useColumnSearchProps('email'),
     },
     {
-      title: 'Score',
+      title: t("Current score"),
       dataIndex: 'score',
       key: 'score',
     },
@@ -90,7 +88,7 @@ function RoomMembers() {
       return {
         key: uid,
         stt: index + 1,
-        photo: (
+        member: (
           <>
             <Space size="small">
               {photoURL ? (
@@ -107,6 +105,7 @@ function RoomMembers() {
                   }
                 />
               )}
+              {displayName}
               {uid === roomData?.owner?.uid && <Tag color="green">owner</Tag>}
               {uid === signinCheckData?.user?.uid && (
                 <Tag color="purple">me</Tag>
@@ -114,7 +113,6 @@ function RoomMembers() {
             </Space>
           </>
         ),
-        name: displayName,
         email,
         score: memberInRoom?.allTotalScore || 0,
       };
@@ -125,8 +123,11 @@ function RoomMembers() {
 
   return (
     <>
-      <Title level={2} style={{ textAlign: 'center' }}>
-        Members
+      <Title
+        level={2}
+        style={{ textAlign: 'center', textTransform: 'capitalize' }}
+      >
+        {t('members')}
       </Title>
       <div>
         <Table bordered={true} columns={columns} dataSource={dataSource} />

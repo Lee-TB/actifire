@@ -21,11 +21,13 @@ import { formatDateTime } from '~/utils/format/date';
 import { useColumnSearchProps } from '../hooks/useColumnSearchProps';
 import { Spin } from '~/components';
 import { InputTimes } from './components';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 const { Option } = Select;
 
 function RoomActivities() {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [activityRow, setActivityRow] = useState('');
   const { status: userStatus, data: userData } = useUser();
@@ -46,39 +48,39 @@ function RoomActivities() {
   let dataSource = [];
   const columns = [
     {
-      title: 'STT',
+      title: t('STT'),
       dataIndex: 'stt',
       key: 'stt',
       ...useColumnSearchProps('stt', 'STT'),
     },
     {
-      title: 'Activity name',
+      title: t('Activity name'),
       dataIndex: 'activityName',
       key: 'activityName',
       ...useColumnSearchProps('activityName', 'activity name'),
     },
     {
-      title: 'Create at',
+      title: t('Create at'),
       dataIndex: 'createAt',
       key: 'createAt',
     },
     {
-      title: 'Activity score',
+      title: t('Activity score'),
       dataIndex: 'activityScore',
       key: 'activityScore',
     },
     {
-      title: 'Choose your role',
+      title: t('Choose your role'),
       dataIndex: 'activityChooseRole',
       key: 'activityChooseRole',
     },
     {
-      title: 'Number of times',
+      title: t('Number of times'),
       dataIndex: 'times',
       key: 'times',
     },
     {
-      title: 'Total score',
+      title: t('Total score'),
       dataIndex: 'activityTotalScore',
       key: 'activityTotalScore',
     },
@@ -86,7 +88,7 @@ function RoomActivities() {
 
   if (roomData?.owner?.uid === userData?.uid) {
     columns.push({
-      title: 'Action',
+      title: t('Action'),
       dataIndex: 'action',
       key: 'action',
     });
@@ -321,13 +323,13 @@ function RoomActivities() {
             onChange={handleSelectRole}
           >
             <Option key="select role" value={''}>
-              {'select role'}
+              {t("select role")}
             </Option>
             {roomData?.roles.map((role) => {
               const { roleName, roleCoef } = role;
               return (
                 <Option key={roleName} value={roleName}>
-                  {`${roleName} (${roleCoef})`}
+                  {`${t(roleName)} (${roleCoef})`}
                 </Option>
               );
             })}
@@ -349,7 +351,7 @@ function RoomActivities() {
             onConfirm={handleDelete}
           >
             <Button type="text" danger>
-              Delete
+              {t('Delete')}
             </Button>
           </Popconfirm>
         ),
@@ -361,8 +363,11 @@ function RoomActivities() {
 
   return (
     <>
-      <Title level={2} style={{ textAlign: 'center' }}>
-        Activities
+      <Title
+        level={2}
+        style={{ textAlign: 'center', textTransform: 'capitalize' }}
+      >
+        {t('activities')}
       </Title>
       <ControllerStyled>
         <div>
@@ -372,7 +377,9 @@ function RoomActivities() {
           }
         </div>
         <div>
-          <strong>All score: {memberData?.allTotalScore}</strong>
+          <strong style={{ textTransform: "capitalize" }}>
+            {t("current score")}: {memberData?.allTotalScore}
+          </strong>
         </div>
       </ControllerStyled>
       <TableContainerStyled>

@@ -16,8 +16,11 @@ import {
   RoomMembers,
   RoomSettings,
 } from './features/room';
+import { useTranslation } from 'react-i18next';
 
 function App() {
+  const {t} = useTranslation();
+  
   return (
     <>
       <Routes>
@@ -41,7 +44,7 @@ function App() {
                 }}
               >
                 <EnrolRoomButton size="large">
-                  Enrol to this room
+                  {t("Enrol to this room")}
                 </EnrolRoomButton>
               </div>
             }
