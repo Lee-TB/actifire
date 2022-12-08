@@ -51,6 +51,19 @@
     "Add activity you want to room": "Thêm hoạt động mà bạn muốn vào phòng",
     "Delete this room": "Xóa phòng này",
     "Member": "Thành viên",
-    "Current score": "Điểm hiện tại"
+    "Current score": "Điểm hiện tại",
+    "create a new room": "tạo phòng mới",
+    "Room name": "Tên phòng",
+    "Description": "Mô tả",
+    "Define roles": "Thêm các vai trò",
+    "If you don't define them. Default roles will be added.": "Nếu bạn không thêm các vai trò, phòng sẽ tự động thêm các vai trò mặc định",
+    "Add role": "Thêm vai trò",
+    "Create room": "Tạo phòng",
+    "Role name": "Tên vai trò",
+    "Coef": "Hệ số",
+    "Please fill your room name": "Vui lòng điền tên phòng",
+    "Please fill role's name.": "Vui lòng điền tên vai trò",
+    "Please fill role's coefficient.": "Vui lòng điền hệ số",
+    "create room": "tạo phòng"
   }
 }

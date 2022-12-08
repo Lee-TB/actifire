@@ -13,6 +13,7 @@ import { useFirestore, useSigninCheck } from 'reactfire';
 import { useNavigate } from 'react-router-dom';
 
 import { Spin } from '~/components';
+import { useTranslation } from 'react-i18next';
 
 const FomContainer = styled.div`
   width: 500px;
@@ -44,12 +45,13 @@ const defaultRoles = [
 
 function CreateRoomForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const { data } = useSigninCheck();
+  const { data, status } = useSigninCheck();
+  const { t } = useTranslation();
 
   const firestore = useFirestore();
   const navigate = useNavigate();
 
-  if (!data?.signedIn) {
+  if (!data?.signedIn && status === "success") {
     navigate('/login');
   }
 
@@ -114,23 +116,23 @@ function CreateRoomForm() {
   return (
     <Spin spinning={isLoading}>
       <FomContainer>
-        <FormTitle>create a new room</FormTitle>
+        <FormTitle>{t('create a new room')}</FormTitle>
         <Form layout="vertical" onFinish={handleFinish}>
           <Form.Item
-            label="Room name"
+            label={t('Room name')}
             name="roomName"
-            rules={[{ required: true, message: 'Please fill your room name' }]}
+            rules={[{ required: true, message: t('Please fill your room name') }]}
           >
             <Input />
           </Form.Item>
 
-          <Form.Item label="Description" name="roomDescription">
+          <Form.Item label={t('Description')} name="roomDescription">
             <Input />
           </Form.Item>
 
-          <Form.Item label="Define roles">
+          <Form.Item label={t("Define roles")}>
             <RoleDescriptionStyled>
-              If you don't define them. Default roles will be added.
+              {t("If you don't define them. Default roles will be added.")}
             </RoleDescriptionStyled>
             <Form.List name="roles">
               {(fields, { add, remove }) => (
@@ -145,12 +147,12 @@ function CreateRoomForm() {
                           rules={[
                             {
                               required: true,
-                              message: "Please fill role's name.",
+                              message: t("Please fill role's name."),
                             },
                           ]}
                           noStyle
                         >
-                          <Input placeholder="Role name" />
+                          <Input placeholder={t("Role name")} />
                         </Form.Item>
 
                         <Form.Item
@@ -160,12 +162,12 @@ function CreateRoomForm() {
                           rules={[
                             {
                               required: true,
-                              message: "Please fill role's coefficient.",
+                              message: t("Please fill role's coefficient."),
                             },
                           ]}
                           noStyle
                         >
-                          <InputNumber placeholder="Coef" min={1} max={10} />
+                          <InputNumber placeholder={t("Coef")} min={1} max={10} />
                         </Form.Item>
 
                         <DeleteRoleButton>
@@ -180,7 +182,7 @@ function CreateRoomForm() {
                       onClick={() => add()}
                       icon={<PlusCircleOutlined />}
                     >
-                      Add role
+                      {t("Add role")}
                     </Button>
                   </Form.Item>
                 </>
@@ -190,7 +192,7 @@ function CreateRoomForm() {
 
           <Form.Item>
             <Button type="primary" htmlType="submit" size="large">
-              Create room
+              {t("Create room")}
             </Button>
           </Form.Item>
         </Form>
