@@ -3,6 +3,7 @@ import { List, Card, Typography, Badge } from 'antd';
 import { Link } from 'react-router-dom';
 import { formatDateTime } from '~/utils/format/date';
 import styled from 'styled-components';
+import { t } from 'i18next';
 const { Title } = Typography;
 
 const CardShadowStyled = styled.div`
@@ -135,7 +136,7 @@ function RoomList({ title, rooms, mode, signedIn }) {
               {signedIn && room?.isEnroled ? (
                 <Link to={`/your-rooms/${room?.id}/activities`}>
                   <CardShadowStyled>
-                    <Badge.Ribbon text="Joined" color="purple">
+                    <Badge.Ribbon text={t("Joined")} color="purple">
                       <Card
                         title={
                           <>

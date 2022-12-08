@@ -16,7 +16,7 @@ function InputTimes({ value, onChangeDebounce, ...props }) {
 
     timeoutId.current = setTimeout(() => {
       onChangeDebounce(number);
-    }, 250);
+    }, 0);
   };
 
   return <InputNumber value={state} onChange={handleInputChange} {...props} />;

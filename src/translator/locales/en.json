@@ -51,6 +51,20 @@
     "Add activity you want to room": "Add activity you want to room",
     "Delete this room": "Delete this room",
     "Member": "Member",
-    "Current score": "Current score"
+    "Current score": "Current score",
+    "create a new room": "create a new room",
+    "Room name": "Room name",
+    "Description": "Description",
+    "Define roles": "add roles",
+    "If you don't define them. Default roles will be added.": "If you don't define them. Default roles will be added.",
+    "Add role": "Add role",
+    "Create room": "Create room",
+    "Role name": "Role name",
+    "Coef": "Coef",
+    "Please fill your room name": "Please fill your room name",
+    "Please fill role's name.": "Please fill role's name.",
+    "Please fill role's coefficient.": "Please fill role's coefficient.",
+    "create room": "create room",
+    "Joined": "Joined"
   }
 }
