@@ -156,13 +156,9 @@ function RoomActivities() {
     };
   }, {});
 
-  const handleSubmitTimes = (activityTimes) => {
+  const handleChangeTimes = (activityTimes) => {
     setIsLoading(true);
-    const { activityId, activityRoleName, activityScore } = activityRow;
-    const roleCoef = Number(roleKeyValuePairs[activityRoleName]);
-    const activityTotalScore = activityRoleName
-      ? roleCoef * activityScore * activityTimes
-      : 0;
+
     const memberDocRef = doc(
       firestore,
       `rooms/${roomId}/members/${userData.uid}`
@@ -173,22 +169,40 @@ function RoomActivities() {
       if (!memberDoc.exists()) {
         throw 'memberDoc does not exist!';
       }
-      const activities = memberDoc.data().activities;
+
+      const { activityId, activityScore } = activityRow;
       const allTotalScore = memberDoc.data().allTotalScore || 0;
-      const prevActivityTotalScore =
-        activities?.[activityId]?.activityTotalScore || 0;
+      const activities = memberDoc.data().activities;
+      let prevActivity = {
+        activityId,
+        activityRole: '',
+        activityTimes: 0,
+        activityTotalScore: 0,
+      };
+
+      if (activities?.[activityId]) {
+        prevActivity = activities?.[activityId];
+      }
+
+      const roleCoef = Number(roleKeyValuePairs[prevActivity.activityRole]);
+      const activityTotalScore = prevActivity.activityRole
+        ? roleCoef * activityScore * activityTimes
+        : 0;
+
+      const prevActivityTotalScore = prevActivity?.activityTotalScore || 0;
+
       // recompute allTotalScore (-) prev (+) current activityTotalScore which has just selected
       const newAllTotalScore =
         allTotalScore - prevActivityTotalScore + activityTotalScore;
+
       transaction.update(memberDocRef, {
         allTotalScore: newAllTotalScore,
         activities: {
           ...activities,
           [activityId]: {
-            activityId,
+            ...prevActivity,
             activityTotalScore,
-            activityRole: activityRoleName,
-            activityTimes: activityTimes || 1,
+            activityTimes: activityTimes || 0,
           },
         },
         updateAt: serverTimestamp(),
@@ -208,38 +222,50 @@ function RoomActivities() {
 
   const handleSelectRole = (roleName) => {
     setIsLoading(true);
-    const { activityId, activityScore, activityTimes } = activityRow;
-
-    const roleCoef = Number(roleKeyValuePairs[roleName]);
-    const activityTotalScore = roleName
-      ? roleCoef * activityScore * (activityTimes || 1)
-      : 0;
-    const memberDocRef = doc(
-      firestore,
-      `rooms/${roomId}/members/${userData.uid}`
-    );
-
     runTransaction(firestore, async (transaction) => {
+      const memberDocRef = doc(
+        firestore,
+        `rooms/${roomId}/members/${userData.uid}`
+      );
       const memberDoc = await transaction.get(memberDocRef);
       if (!memberDoc.exists()) {
         throw 'memberDoc does not exist!';
       }
+      const { activityId, activityScore } = activityRow;
       const activities = memberDoc.data().activities;
       const allTotalScore = memberDoc.data().allTotalScore || 0;
-      const prevActivityTotalScore =
-        activities?.[activityId]?.activityTotalScore || 0;
+      const roleCoef = Number(roleKeyValuePairs[roleName]);
+
+      let prevActivity = {
+        activityId,
+        activityRole: '',
+        activityTimes: 0,
+        activityTotalScore: 0,
+      };
+
+      if (activities?.[activityId]) {
+        prevActivity = activities?.[activityId];
+      }
+
+      const activityTotalScore = roleName
+        ? roleCoef * activityScore * (prevActivity.activityTimes || 0)
+        : 0;
+
+      const prevActivityTotalScore = prevActivity?.activityTotalScore || 0;
+
       // recompute allTotalScore (-) prev (+) current activityTotalScore which has just selected
       const newAllTotalScore =
         allTotalScore - prevActivityTotalScore + activityTotalScore;
+
       transaction.update(memberDocRef, {
         allTotalScore: newAllTotalScore,
         activities: {
           ...activities,
           [activityId]: {
-            activityId,
+            ...prevActivity,
             activityTotalScore,
             activityRole: roleName,
-            activityTimes: !roleName ? 0 : activityTimes || 1,
+            activityTimes: prevActivity.activityTimes || 0,
           },
         },
         updateAt: serverTimestamp(),
@@ -323,7 +349,7 @@ function RoomActivities() {
             onChange={handleSelectRole}
           >
             <Option key="select role" value={''}>
-              {t("select role")}
+              {t('select role')}
             </Option>
             {roomData?.roles.map((role) => {
               const { roleName, roleCoef } = role;
@@ -337,7 +363,7 @@ function RoomActivities() {
         ),
         times: (
           <InputTimes
-            onChangeDebounce={handleSubmitTimes}
+            onChangeDebounce={handleChangeTimes}
             value={activityTimes}
             min="0"
           />
@@ -377,8 +403,8 @@ function RoomActivities() {
           }
         </div>
         <div>
-          <strong style={{ textTransform: "capitalize" }}>
-            {t("current score")}: {memberData?.allTotalScore}
+          <strong style={{ textTransform: 'capitalize' }}>
+            {t('current score')}: {memberData?.allTotalScore}
           </strong>
         </div>
       </ControllerStyled>
